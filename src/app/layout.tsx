@@ -16,6 +16,7 @@ const geistMono = Geist_Mono({
 });
 
 export const metadata: Metadata = {
+  metadataBase: new URL("https://hello.frankji.com"),
   title: "Frank Ji | Front-End Developer",
   description:
     "Front-end developer specialising in Angular, React, and enterprise e-commerce platforms. Building performant, accessible web experiences.",
