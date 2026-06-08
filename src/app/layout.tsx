@@ -20,6 +20,9 @@ export const metadata: Metadata = {
   title: "Frank Ji | Front-End Developer",
   description:
     "Front-end developer specialising in Angular, React, and enterprise e-commerce platforms. Building performant, accessible web experiences.",
+  verification: {
+    google: "4KPYDEWwqJxCzwzysop1BZMZc7HAIVdr9EwM2LZXEVk",
+  },
   openGraph: {
     title: "Frank Ji | Front-End Developer",
     description:
