@@ -1,26 +1,4 @@
-interface SkillCategory {
-  label: string;
-  items: string[];
-}
-
-const SKILLS: SkillCategory[] = [
-  {
-    label: "Front-End",
-    items: ["Angular", "React", "Next.js", "TypeScript", "RxJS", "NgRx", "Tailwind CSS", "SCSS"],
-  },
-  {
-    label: "Back-End",
-    items: ["Node.js", "NestJS", "Express", "GraphQL", ".NET"],
-  },
-  {
-    label: "Cloud & Infrastructure",
-    items: ["AWS Lambda", "S3", "SES", "DynamoDB", "Cognito", "SSM"],
-  },
-  {
-    label: "Tools & Platforms",
-    items: ["Git", "SAP Spartacus", "Algolia", "Vite", "esbuild"],
-  },
-];
+import { SKILLS } from "@/data/portfolio";
 
 export function Skills() {
   return (

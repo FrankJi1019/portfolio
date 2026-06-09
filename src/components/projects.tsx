@@ -1,22 +1,6 @@
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faArrowUpRightFromSquare } from "@fortawesome/free-solid-svg-icons";
-
-interface Project {
-  title: string;
-  description: string;
-  tech: string[];
-  link?: string;
-}
-
-const PROJECTS: Project[] = [
-  {
-    title: "Remind Me",
-    description:
-      "A serverless morning briefing system that sends a daily HTML email digest with upcoming Google Calendar events and Notion todos. Built as a set of single-responsibility AWS Lambda functions orchestrated together.",
-    tech: ["TypeScript", "AWS Lambda", "SES", "DynamoDB", "Google Calendar API", "Notion API"],
-    link: "https://github.com/FrankJi1019/remin-me",
-  },
-];
+import { PROJECTS } from "@/data/portfolio";
 
 export function Projects() {
   return (
