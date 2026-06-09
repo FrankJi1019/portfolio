@@ -2,7 +2,7 @@
 
 Personal developer portfolio built with Next.js, Tailwind CSS, and TypeScript.
 
-**Live:** [hello.frankji.com](https://hello.frankji.com)
+**Live:** [www.frankji.com](https://www.frankji.com)
 
 ## Tech Stack
 

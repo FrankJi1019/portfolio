@@ -17,10 +17,25 @@ const geistMono = Geist_Mono({
 });
 
 export const metadata: Metadata = {
-  metadataBase: new URL("https://hello.frankji.com"),
+  metadataBase: new URL("https://www.frankji.com"),
   title: "Frank Ji | Front-End Developer",
   description:
     "Front-end developer specialising in Angular, React, and enterprise e-commerce platforms. Building performant, accessible web experiences.",
+  keywords: [
+    "Frank Ji",
+    "front-end developer",
+    "Angular developer",
+    "React developer",
+    "TypeScript",
+    "New Zealand",
+    "web developer",
+    "SAP Composable Storefront",
+  ],
+  authors: [{ name: "Frank Ji", url: "https://www.frankji.com" }],
+  creator: "Frank Ji",
+  alternates: {
+    canonical: "https://www.frankji.com",
+  },
   verification: {
     google: "4KPYDEWwqJxCzwzysop1BZMZc7HAIVdr9EwM2LZXEVk",
   },
@@ -28,7 +43,44 @@ export const metadata: Metadata = {
     title: "Frank Ji | Front-End Developer",
     description:
       "Front-end developer specialising in Angular, React, and enterprise e-commerce platforms.",
+    url: "https://www.frankji.com",
+    siteName: "Frank Ji",
     type: "website",
+    locale: "en_NZ",
+  },
+  twitter: {
+    card: "summary",
+    title: "Frank Ji | Front-End Developer",
+    description:
+      "Front-end developer specialising in Angular, React, and enterprise e-commerce platforms.",
+  },
+  robots: {
+    index: true,
+    follow: true,
+  },
+};
+
+const jsonLd = {
+  "@context": "https://schema.org",
+  "@type": "Person",
+  name: "Frank Ji",
+  url: "https://www.frankji.com",
+  jobTitle: "Front-End Developer",
+  knowsAbout: [
+    "Angular",
+    "React",
+    "TypeScript",
+    "SAP Composable Storefront",
+    "AWS",
+    "Next.js",
+  ],
+  alumniOf: {
+    "@type": "EducationalOrganization",
+    name: "University of Auckland",
+  },
+  workLocation: {
+    "@type": "Place",
+    name: "New Zealand",
   },
 };
 
@@ -44,6 +96,10 @@ export default function RootLayout({
       suppressHydrationWarning
     >
       <head>
+        <script
+          type="application/ld+json"
+          dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
+        />
         <script
           dangerouslySetInnerHTML={{
             __html: `(function(){document.documentElement.classList.add('dark')})()`,
