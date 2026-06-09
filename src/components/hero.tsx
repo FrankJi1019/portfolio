@@ -42,6 +42,12 @@ export function Hero() {
           Get in Touch
         </a>
       </div>
+      <p className="mt-6 hidden items-center gap-1.5 font-mono text-xs text-[var(--muted)] md:flex">
+        Press{" "}
+        <kbd className="rounded border border-[var(--border)] px-1.5 py-0.5 text-[10px]">Ctrl</kbd>
+        <kbd className="rounded border border-[var(--border)] px-1.5 py-0.5 text-[10px]">K</kbd>
+        {" "}to open command palette
+      </p>
     </section>
   );
 }
