@@ -1,5 +1,6 @@
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faCircle } from "@fortawesome/free-solid-svg-icons";
+import { TypingText } from "./typing-text";
 
 export function Hero() {
   return (
@@ -16,7 +17,7 @@ export function Hero() {
         </span>
       </h1>
       <h2 className="mt-4 font-mono text-lg text-[var(--muted)] sm:text-xl">
-        &gt; front_end_developer
+        <TypingText />
       </h2>
       <p className="mt-6 max-w-lg text-[var(--muted)] leading-relaxed">
         I build performant, accessible web experiences — from enterprise

@@ -18,6 +18,24 @@ const EXPERIENCE: Role[] = [
     ],
   },
   {
+    title: "Graduate Teaching Assistant",
+    company: "University of Auckland",
+    period: "Jul 2023 — Nov 2023",
+    points: [
+      "Mentored final-year Computer Science students across .NET, front-end, and Python (Flask).",
+      "Reviewed and graded coursework, providing detailed technical feedback.",
+    ],
+  },
+  {
+    title: "Tutor",
+    company: "YouTutor Ltd.",
+    period: "Aug 2023 — Nov 2023",
+    points: [
+      "Provided academic support to Computer Science students.",
+      "Taught Object-Oriented Programming and Java concepts.",
+    ],
+  },
+  {
     title: "Full-Stack Software Engineer",
     company: "CentraPass",
     period: "Jan 2022 — Jun 2023",
@@ -25,15 +43,6 @@ const EXPERIENCE: Role[] = [
       "Delivered end-to-end features across React/Next.js front-ends and NestJS REST APIs.",
       "Designed and integrated serverless authentication flows using AWS Lambda and Cognito.",
       "Built data layers against MongoDB and PostgreSQL, handling schema design and query optimisation.",
-    ],
-  },
-  {
-    title: "Teaching Assistant & Tutor",
-    company: "University of Auckland / YouTutor Ltd.",
-    period: "Jul 2023 — Nov 2023",
-    points: [
-      "Mentored final-year Computer Science students across OOP, .NET, front-end, and Python (Flask).",
-      "Reviewed and graded coursework, providing detailed technical feedback to improve student outcomes.",
     ],
   },
 ];
