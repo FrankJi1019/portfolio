@@ -1,3 +1,6 @@
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faArrowUpRightFromSquare } from "@fortawesome/free-solid-svg-icons";
+
 interface Project {
   title: string;
   description: string;
@@ -34,7 +37,7 @@ export function Projects() {
                   rel="noopener noreferrer"
                   className="shrink-0 text-sm text-accent hover:underline"
                 >
-                  GitHub ↗
+                  <FontAwesomeIcon icon={faArrowUpRightFromSquare} className="h-4 w-4" /> GitHub
                 </a>
               )}
             </div>

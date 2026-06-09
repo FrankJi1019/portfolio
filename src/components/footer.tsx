@@ -1,7 +1,12 @@
-const LINKS = [
-  { label: "Email", href: "mailto:frankjishiyuan@gmail.com" },
-  { label: "GitHub", href: "https://github.com/FrankJi1019" },
-  { label: "LinkedIn", href: "https://www.linkedin.com/in/frank-ji-1019" },
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faEnvelope } from "@fortawesome/free-solid-svg-icons";
+import { faGithub, faLinkedin } from "@fortawesome/free-brands-svg-icons";
+import type { IconDefinition } from "@fortawesome/fontawesome-svg-core";
+
+const LINKS: { label: string; href: string; icon: IconDefinition }[] = [
+  { label: "Email", href: "mailto:frankjishiyuan@gmail.com", icon: faEnvelope },
+  { label: "GitHub", href: "https://github.com/FrankJi1019", icon: faGithub },
+  { label: "LinkedIn", href: "https://www.linkedin.com/in/frank-ji-1019", icon: faLinkedin },
 ];
 
 export function Footer() {
@@ -16,8 +21,9 @@ export function Footer() {
               href={link.href}
               target="_blank"
               rel="noopener noreferrer"
-              className="text-sm text-[var(--muted)] transition-colors hover:text-accent"
+              className="text-sm text-[var(--muted)] transition-colors hover:text-accent flex items-center gap-1.5"
             >
+              <FontAwesomeIcon icon={link.icon} className="h-4 w-4" />
               {link.label}
             </a>
           ))}

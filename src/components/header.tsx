@@ -1,6 +1,8 @@
 "use client";
 
 import { useState } from "react";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faBars, faXmark } from "@fortawesome/free-solid-svg-icons";
 
 const NAV_LINKS = [
   { href: "#about", label: "About" },
@@ -48,9 +50,7 @@ export function Header() {
           aria-label="Toggle menu"
           className="rounded-md p-2 text-[var(--muted)] md:hidden"
         >
-          <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-            {isOpen ? <path d="M18 6L6 18M6 6l12 12" /> : <path d="M3 12h18M3 6h18M3 18h18" />}
-          </svg>
+          <FontAwesomeIcon icon={isOpen ? faXmark : faBars} className="h-5 w-5" />
         </button>
       </nav>
 

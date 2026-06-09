@@ -1,9 +1,12 @@
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faCircle } from "@fortawesome/free-solid-svg-icons";
+
 export function Hero() {
   return (
     <section className="relative flex min-h-[60vh] flex-col justify-center py-16 sm:min-h-[calc(100vh-73px)] sm:py-20">
       {/* Status badge */}
       <div className="mb-8 flex items-center gap-2 rounded-full border border-[var(--border)] px-3 py-1.5 w-fit font-mono">
-        <span className="h-2 w-2 rounded-full bg-emerald-400 animate-[pulse-dot_2s_ease-in-out_infinite]" />
+        <FontAwesomeIcon icon={faCircle} className="text-[6px] text-emerald-400 animate-[pulse-dot_2s_ease-in-out_infinite]" />
         <span className="text-xs text-accent">status: open_to_work</span>
       </div>
 
