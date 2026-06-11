@@ -2,7 +2,7 @@ import { SKILLS } from "@/data/portfolio";
 
 export function Skills() {
   return (
-    <section id="skills" className="py-20">
+    <section id="skills" aria-label="Technical skills" className="py-20">
       <h2 className="text-2xl font-bold">Skills</h2>
       <div className="mt-8 grid gap-8 sm:grid-cols-2">
         {SKILLS.map((category) => (

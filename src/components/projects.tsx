@@ -4,11 +4,11 @@ import { PROJECTS } from "@/data/portfolio";
 
 export function Projects() {
   return (
-    <section id="projects" className="py-20">
+    <section id="projects" aria-label="Projects" className="py-20">
       <h2 className="text-2xl font-bold">Projects</h2>
       <div className="mt-8 space-y-4">
         {PROJECTS.map((project) => (
-          <div
+          <article
             key={project.title}
             className="card-glow rounded-lg border border-[var(--border)] bg-[var(--card)] p-6 hover:border-accent"
           >
@@ -19,26 +19,27 @@ export function Projects() {
                   href={project.link}
                   target="_blank"
                   rel="noopener noreferrer"
+                  aria-label={`View ${project.title} on GitHub`}
                   className="shrink-0 text-sm text-accent hover:underline"
                 >
-                  <FontAwesomeIcon icon={faArrowUpRightFromSquare} className="h-4 w-4" /> GitHub
+                  <FontAwesomeIcon icon={faArrowUpRightFromSquare} className="h-4 w-4" aria-hidden="true" /> GitHub
                 </a>
               )}
             </div>
             <p className="mt-3 text-sm text-[var(--muted)] leading-relaxed max-w-2xl">
               {project.description}
             </p>
-            <div className="mt-4 flex flex-wrap gap-2">
+            <ul className="mt-4 flex flex-wrap gap-2" aria-label="Technologies used">
               {project.tech.map((t) => (
-                <span
+                <li
                   key={t}
                   className="rounded-full bg-accent/10 px-2.5 py-0.5 text-xs font-medium text-accent"
                 >
                   {t}
-                </span>
+                </li>
               ))}
-            </div>
-          </div>
+            </ul>
+          </article>
         ))}
       </div>
     </section>

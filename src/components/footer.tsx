@@ -14,7 +14,7 @@ export function Footer() {
     <footer className="border-t border-[var(--border)] py-8">
       <div className="mx-auto flex max-w-5xl flex-col items-center gap-4 px-6 sm:flex-row sm:justify-between">
         <p className="text-sm text-[var(--muted)]">© 2026 Frank Ji</p>
-        <div className="flex gap-6">
+        <nav aria-label="Social links" className="flex gap-6">
           {LINKS.map((link) => (
             <a
               key={link.label}
@@ -27,7 +27,7 @@ export function Footer() {
               {link.label}
             </a>
           ))}
-        </div>
+        </nav>
       </div>
     </footer>
   );

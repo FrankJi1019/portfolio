@@ -4,7 +4,7 @@ import { TypingText } from "./typing-text";
 
 export function Hero() {
   return (
-    <section className="relative flex min-h-[60vh] flex-col justify-center py-16 sm:min-h-[calc(100vh-73px)] sm:py-20">
+    <section aria-label="Introduction" className="relative flex min-h-[60vh] flex-col justify-center py-16 sm:min-h-[calc(100vh-73px)] sm:py-20">
       {/* Status badge */}
       <div className="mb-8 flex items-center gap-2 rounded-full border border-[var(--border)] px-3 py-1.5 w-fit font-mono">
         <FontAwesomeIcon icon={faCircle} className="text-[6px] text-emerald-400 animate-[pulse-dot_2s_ease-in-out_infinite]" />

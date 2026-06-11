@@ -19,9 +19,9 @@ const geistMono = Geist_Mono({
 
 export const metadata: Metadata = {
   metadataBase: new URL("https://www.frankji.com"),
-  title: "Frank Ji | Front-End Developer",
+  title: "Frank Ji | Front-End Developer — Angular, React & TypeScript",
   description:
-    "Front-end developer specialising in Angular, React, and enterprise e-commerce platforms. Building performant, accessible web experiences.",
+    "Frank Ji is a front-end developer in New Zealand specialising in Angular, React, TypeScript, and SAP Composable Storefront. Building performant, accessible enterprise e-commerce and serverless web experiences.",
   keywords: [
     "Frank Ji",
     "front-end developer",
@@ -31,6 +31,11 @@ export const metadata: Metadata = {
     "New Zealand",
     "web developer",
     "SAP Composable Storefront",
+    "Spartacus",
+    "Next.js",
+    "AWS",
+    "e-commerce developer",
+    "software engineer Auckland",
   ],
   authors: [{ name: "Frank Ji", url: "https://www.frankji.com" }],
   creator: "Frank Ji",
@@ -41,23 +46,39 @@ export const metadata: Metadata = {
     google: "4KPYDEWwqJxCzwzysop1BZMZc7HAIVdr9EwM2LZXEVk",
   },
   openGraph: {
-    title: "Frank Ji | Front-End Developer",
+    title: "Frank Ji | Front-End Developer — Angular, React & TypeScript",
     description:
-      "Front-end developer specialising in Angular, React, and enterprise e-commerce platforms.",
+      "Front-end developer in New Zealand building enterprise e-commerce platforms with Angular, React, and SAP Composable Storefront. View projects, experience, and skills.",
     url: "https://www.frankji.com",
-    siteName: "Frank Ji",
+    siteName: "Frank Ji — Portfolio",
     type: "website",
     locale: "en_NZ",
+    images: [
+      {
+        url: "/og-image.png",
+        width: 1200,
+        height: 630,
+        alt: "Frank Ji — Front-End Developer Portfolio",
+      },
+    ],
   },
   twitter: {
-    card: "summary",
-    title: "Frank Ji | Front-End Developer",
+    card: "summary_large_image",
+    title: "Frank Ji | Front-End Developer — Angular, React & TypeScript",
     description:
-      "Front-end developer specialising in Angular, React, and enterprise e-commerce platforms.",
+      "Front-end developer in New Zealand building enterprise e-commerce platforms and serverless applications.",
+    images: ["/og-image.png"],
   },
   robots: {
     index: true,
     follow: true,
+    googleBot: {
+      index: true,
+      follow: true,
+      "max-video-preview": -1,
+      "max-image-preview": "large",
+      "max-snippet": -1,
+    },
   },
 };
 
@@ -67,6 +88,13 @@ const jsonLd = {
   name: "Frank Ji",
   url: "https://www.frankji.com",
   jobTitle: "Front-End Developer",
+  description:
+    "Front-end developer specialising in Angular, React, TypeScript, and enterprise e-commerce platforms.",
+  sameAs: [
+    "https://github.com/FrankJi1019",
+    "https://www.linkedin.com/in/frank-ji-1019",
+  ],
+  email: "frankjishiyuan@gmail.com",
   knowsAbout: [
     "Angular",
     "React",
@@ -74,15 +102,45 @@ const jsonLd = {
     "SAP Composable Storefront",
     "AWS",
     "Next.js",
+    "Node.js",
+    "RxJS",
+    "NgRx",
+    "Tailwind CSS",
+    "GraphQL",
+    "DynamoDB",
   ],
+  hasOccupation: [
+    {
+      "@type": "Occupation",
+      name: "Front-End Developer",
+      occupationLocation: { "@type": "Country", name: "New Zealand" },
+      skills:
+        "Angular, React, TypeScript, SAP Composable Storefront, NgRx, RxJS",
+    },
+  ],
+  worksFor: {
+    "@type": "Organization",
+    name: "Mitre 10",
+    url: "https://www.mitre10.co.nz",
+  },
   alumniOf: {
     "@type": "EducationalOrganization",
     name: "University of Auckland",
+    url: "https://www.auckland.ac.nz",
   },
   workLocation: {
     "@type": "Place",
     name: "New Zealand",
   },
+};
+
+const websiteJsonLd = {
+  "@context": "https://schema.org",
+  "@type": "WebSite",
+  name: "Frank Ji — Portfolio",
+  url: "https://www.frankji.com",
+  description:
+    "Personal portfolio of Frank Ji, a front-end developer based in New Zealand.",
 };
 
 export default function RootLayout({
@@ -100,6 +158,10 @@ export default function RootLayout({
         <script
           type="application/ld+json"
           dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
+        />
+        <script
+          type="application/ld+json"
+          dangerouslySetInnerHTML={{ __html: JSON.stringify(websiteJsonLd) }}
         />
         <script
           dangerouslySetInnerHTML={{

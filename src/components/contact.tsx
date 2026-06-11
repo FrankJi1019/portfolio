@@ -11,7 +11,7 @@ const ICONS: Record<string, typeof faEnvelope> = {
 
 export function Contact() {
   return (
-    <section id="contact" className="py-20">
+    <section id="contact" aria-label="Contact information" className="py-20">
       <h2 className="text-2xl font-bold">Get in Touch</h2>
       <p className="mt-4 max-w-lg text-[var(--muted)]">
         I&apos;m always open to interesting conversations and opportunities.
