@@ -90,6 +90,23 @@ section + section {
   100% { background-position: 100% 50%; }
 }
 
+/* Color flow animation */
+.name-flow {
+  background-image: linear-gradient(
+    90deg,
+    #22d3ee,
+    #6366f1,
+    #22d3ee
+  );
+  background-size: 300% 100%;
+  animation: color-flow 3s linear infinite;
+}
+
+@keyframes color-flow {
+  0% { background-position: 0% 50%; }
+  100% { background-position: 300% 50%; }
+}
+
 /* Status indicator pulse */
 @keyframes pulse-dot {
   0%, 100% { opacity: 1; }
