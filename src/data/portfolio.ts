@@ -1,3 +1,5 @@
+import data from "./portfolio.json";
+
 export interface Role {
   title: string;
   company: string;
@@ -24,115 +26,55 @@ export interface SkillCategory {
   items: string[];
 }
 
+export interface Certification {
+  name: string;
+  issuer: string;
+  issued: string;
+  expires: string;
+  credlyUrl?: string;
+}
+
 export interface ContactLink {
   label: string;
   href: string;
   display: string;
 }
 
-export const ABOUT =
-  "I'm a front-end developer based in New Zealand with a background in software engineering from the University of Auckland. I enjoy building things that live on the web — whether that's a large-scale commerce platform serving thousands of customers or a personal tool that makes my mornings easier.\n\nDay-to-day, I work on enterprise e-commerce storefronts using Angular and SAP Composable Storefront (Spartacus), handling everything from component architecture and state management to SSR and search integration. Outside of work, I gravitate toward React, TypeScript, and AWS — building serverless apps and exploring new patterns.\n\nI care about clean code, thoughtful UX, and shipping things that actually work well for the people using them.";
+export interface NavLink {
+  href: string;
+  label: string;
+}
 
-export const EXPERIENCE: Role[] = [
-  {
-    title: "Front-End Developer",
-    company: "Mitre 10",
-    period: "Feb 2024 — Present",
-    points: [
-      "Develop and maintain a high-traffic B2C e-commerce storefront using Angular and SAP Composable Storefront (Spartacus).",
-      "Drive server-side rendering optimisation and SEO improvements, boosting organic search visibility.",
-      "Implement Algolia-powered search experiences across product catalogue and content pages.",
-      "Architect complex state management with NgRx and RxJS across checkout, cart, and product domains.",
-    ],
-  },
-  {
-    title: "Graduate Teaching Assistant",
-    company: "University of Auckland",
-    period: "Jul 2023 — Nov 2023",
-    points: [
-      "Mentored final-year Computer Science students across .NET, front-end, and Python (Flask).",
-      "Reviewed and graded coursework, providing detailed technical feedback.",
-    ],
-  },
-  {
-    title: "Tutor",
-    company: "YouTutor Ltd.",
-    period: "Aug 2023 — Nov 2023",
-    points: [
-      "Provided academic support to Computer Science students.",
-      "Taught Object-Oriented Programming and Java concepts.",
-    ],
-  },
-  {
-    title: "Full-Stack Software Engineer",
-    company: "CentraPass",
-    period: "Jan 2022 — Jun 2023",
-    points: [
-      "Delivered end-to-end features across React/Next.js front-ends and NestJS REST APIs.",
-      "Designed and integrated serverless authentication flows using AWS Lambda and Cognito.",
-      "Built data layers against MongoDB and PostgreSQL, handling schema design and query optimisation.",
-    ],
-  },
-];
+export interface HeroData {
+  statusText: string;
+  heading: string;
+  subtitle: string;
+  tagline: string;
+  techBadges: string[];
+}
 
-export const EDUCATION: EducationEntry[] = [
-  {
-    institution: "University of Auckland",
-    degree: "Bachelor of Engineering (Honours) — Software Engineering",
-    period: "Mar 2019 — Nov 2023",
-    achievements: [
-      "First Class Honours",
-      "Dean's Honour List, 2021",
-      "Summer Research Scholarship, 2023–2024",
-      "NZ Programming Contest — 1st place (2021), 3rd place (2022)",
-      "Southern Pacific Programming Contest, 2021",
-      "ANZAC Programming Contest, 2022 — multiple rounds",
-      "First-in-course: Mathematics Modelling & Fundamental of Computer Systems (2021)",
-    ],
-  },
-  {
-    institution: "Howick College",
-    degree: "Secondary School",
-    period: "May 2016 — Nov 2018",
-    achievements: [
-      "NCEA Scholarship Calculus, 2018",
-      "Top student in Calculus and English Language, 2018",
-      "Excellence Endorsements in Level 3 Calculus and Statistics",
-    ],
-  },
-];
+export interface MetaData {
+  name: string;
+  title: string;
+  siteUrl: string;
+  siteName: string;
+  locale: string;
+  seoTitle: string;
+  seoDescription: string;
+  seoKeywords: string[];
+  ogDescription: string;
+  twitterDescription: string;
+  googleVerification: string;
+  resumeUrl: string;
+}
 
-export const PROJECTS: Project[] = [
-  {
-    title: "Remind Me",
-    description:
-      "A serverless morning briefing system that sends a daily HTML email digest with upcoming Google Calendar events and Notion todos. Built as a set of single-responsibility AWS Lambda functions orchestrated together.",
-    tech: ["TypeScript", "AWS Lambda", "SES", "DynamoDB", "Google Calendar API", "Notion API"],
-    link: "https://github.com/FrankJi1019/remin-me",
-  },
-];
-
-export const SKILLS: SkillCategory[] = [
-  {
-    label: "Front-End",
-    items: ["Angular", "React", "Next.js", "TypeScript", "RxJS", "NgRx", "Tailwind CSS", "SCSS"],
-  },
-  {
-    label: "Back-End",
-    items: ["Node.js", "NestJS", "Express", "GraphQL", ".NET"],
-  },
-  {
-    label: "Cloud & Infrastructure",
-    items: ["AWS Lambda", "S3", "SES", "DynamoDB", "Cognito", "SSM"],
-  },
-  {
-    label: "Tools & Platforms",
-    items: ["Git", "SAP Spartacus", "Algolia", "Vite", "esbuild"],
-  },
-];
-
-export const CONTACT: ContactLink[] = [
-  { label: "Email", href: "mailto:frankjishiyuan@gmail.com", display: "frankjishiyuan@gmail.com" },
-  { label: "GitHub", href: "https://github.com/FrankJi1019", display: "github.com/FrankJi1019" },
-  { label: "LinkedIn", href: "https://www.linkedin.com/in/frank-ji-1019", display: "linkedin.com/in/frank-ji-1019" },
-];
+export const META: MetaData = data.meta;
+export const HERO: HeroData = data.hero;
+export const ABOUT: string = data.about;
+export const EXPERIENCE: Role[] = data.experience;
+export const EDUCATION: EducationEntry[] = data.education;
+export const PROJECTS: Project[] = data.projects;
+export const SKILLS: SkillCategory[] = data.skills;
+export const CERTIFICATIONS: Certification[] = data.certifications;
+export const CONTACT: ContactLink[] = data.contact;
+export const NAV_LINKS: NavLink[] = data.navLinks;

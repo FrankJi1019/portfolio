@@ -1,21 +1,23 @@
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faEnvelope } from "@fortawesome/free-solid-svg-icons";
+import { faEnvelope, faAward } from "@fortawesome/free-solid-svg-icons";
 import { faGithub, faLinkedin } from "@fortawesome/free-brands-svg-icons";
 import type { IconDefinition } from "@fortawesome/fontawesome-svg-core";
+import { CONTACT, META } from "@/data/portfolio";
 
-const LINKS: { label: string; href: string; icon: IconDefinition }[] = [
-  { label: "Email", href: "mailto:frankjishiyuan@gmail.com", icon: faEnvelope },
-  { label: "GitHub", href: "https://github.com/FrankJi1019", icon: faGithub },
-  { label: "LinkedIn", href: "https://www.linkedin.com/in/frank-ji-1019", icon: faLinkedin },
-];
+const ICONS: Record<string, IconDefinition> = {
+  Email: faEnvelope,
+  GitHub: faGithub,
+  LinkedIn: faLinkedin,
+  Credly: faAward,
+};
 
 export function Footer() {
   return (
     <footer className="border-t border-[var(--border)] py-8">
       <div className="mx-auto flex max-w-5xl flex-col items-center gap-4 px-6 sm:flex-row sm:justify-between">
-        <p className="text-sm text-[var(--muted)]">© 2026 Frank Ji</p>
+        <p className="text-sm text-[var(--muted)]">© {new Date().getFullYear()} {META.name}</p>
         <nav aria-label="Social links" className="flex gap-6">
-          {LINKS.map((link) => (
+          {CONTACT.map((link) => (
             <a
               key={link.label}
               href={link.href}
@@ -23,7 +25,7 @@ export function Footer() {
               rel="noopener noreferrer"
               className="text-sm text-[var(--muted)] transition-colors hover:text-accent flex items-center gap-1.5"
             >
-              <FontAwesomeIcon icon={link.icon} className="h-4 w-4" />
+              <FontAwesomeIcon icon={ICONS[link.label]} className="h-4 w-4" />
               {link.label}
             </a>
           ))}

@@ -6,15 +6,18 @@ import {
   faUser,
   faBriefcase,
   faGraduationCap,
+  faCertificate,
   faDiagramProject,
   faCubes,
   faEnvelope,
   faTerminal,
   faMagnifyingGlass,
+  faAward,
 } from "@fortawesome/free-solid-svg-icons";
 import { faGithub, faLinkedin } from "@fortawesome/free-brands-svg-icons";
 import type { IconDefinition } from "@fortawesome/fontawesome-svg-core";
 import { useTerminalMode } from "./terminal-mode-provider";
+import { CONTACT, NAV_LINKS } from "@/data/portfolio";
 
 interface Command {
   id: string;
@@ -33,17 +36,40 @@ function openLink(url: string) {
   window.open(url, "_blank", "noopener,noreferrer");
 }
 
-const COMMANDS: Command[] = [
-  { id: "about", label: "About", shortcut: "/about", icon: faUser, group: "Navigation", action: () => navigate("#about") },
-  { id: "experience", label: "Work Experience", shortcut: "/work", icon: faBriefcase, group: "Navigation", action: () => navigate("#experience") },
-  { id: "education", label: "Education", shortcut: "/edu", icon: faGraduationCap, group: "Navigation", action: () => navigate("#education") },
-  { id: "projects", label: "Projects", shortcut: "/projects", icon: faDiagramProject, group: "Navigation", action: () => navigate("#projects") },
-  { id: "skills", label: "Skills", shortcut: "/skills", icon: faCubes, group: "Navigation", action: () => navigate("#skills") },
-  { id: "contact", label: "Contact", shortcut: "/contact", icon: faEnvelope, group: "Navigation", action: () => navigate("#contact") },
-  { id: "github", label: "GitHub", shortcut: "/github", icon: faGithub, group: "Links", action: () => openLink("https://github.com/FrankJi1019") },
-  { id: "linkedin", label: "LinkedIn", shortcut: "/linkedin", icon: faLinkedin, group: "Links", action: () => openLink("https://www.linkedin.com/in/frank-ji-1019") },
-  { id: "email", label: "Email", shortcut: "/email", icon: faEnvelope, group: "Links", action: () => openLink("mailto:frankjishiyuan@gmail.com") },
-];
+const NAV_ICONS: Record<string, IconDefinition> = {
+  About: faUser,
+  Experience: faBriefcase,
+  Education: faGraduationCap,
+  Certifications: faCertificate,
+  Projects: faDiagramProject,
+  Skills: faCubes,
+  Contact: faEnvelope,
+};
+
+const LINK_ICONS: Record<string, IconDefinition> = {
+  Email: faEnvelope,
+  GitHub: faGithub,
+  LinkedIn: faLinkedin,
+  Credly: faAward,
+};
+
+const NAV_COMMANDS: Command[] = NAV_LINKS.map((link) => ({
+  id: link.label.toLowerCase(),
+  label: link.label,
+  shortcut: `/${link.label.toLowerCase()}`,
+  icon: NAV_ICONS[link.label] ?? faUser,
+  group: "Navigation",
+  action: () => navigate(link.href),
+}));
+
+const LINK_COMMANDS: Command[] = CONTACT.map((c) => ({
+  id: c.label.toLowerCase(),
+  label: c.label,
+  shortcut: `/${c.label.toLowerCase()}`,
+  icon: LINK_ICONS[c.label] ?? faEnvelope,
+  group: "Links",
+  action: () => openLink(c.href),
+}));
 
 export function CommandPalette() {
   const [isOpen, setIsOpen] = useState(false);
@@ -53,7 +79,8 @@ export function CommandPalette() {
   const { isTerminalMode, toggleTerminalMode } = useTerminalMode();
 
   const allCommands: Command[] = [
-    ...COMMANDS,
+    ...NAV_COMMANDS,
+    ...LINK_COMMANDS,
     {
       id: "terminal",
       label: isTerminalMode ? "Exit Terminal" : "Open Terminal",

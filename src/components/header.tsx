@@ -4,15 +4,7 @@ import { useState } from "react";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faBars, faXmark, faTerminal, faDesktop } from "@fortawesome/free-solid-svg-icons";
 import { useTerminalMode } from "./terminal-mode-provider";
-
-const NAV_LINKS = [
-  { href: "#about", label: "About" },
-  { href: "#experience", label: "Experience" },
-  { href: "#education", label: "Education" },
-  { href: "#projects", label: "Projects" },
-  { href: "#skills", label: "Skills" },
-  { href: "#contact", label: "Contact" },
-];
+import { NAV_LINKS } from "@/data/portfolio";
 
 export function Header() {
   const [isOpen, setIsOpen] = useState(false);

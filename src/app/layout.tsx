@@ -6,6 +6,7 @@ import { ThemeProvider } from "@/components/theme-provider";
 import { CommandPalette } from "@/components/command-palette";
 import { TerminalModeProvider } from "@/components/terminal-mode-provider";
 import { MainContent } from "@/components/main-content";
+import { META, CONTACT, SKILLS } from "@/data/portfolio";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -17,130 +18,70 @@ const geistMono = Geist_Mono({
   subsets: ["latin"],
 });
 
+const emailContact = CONTACT.find((c) => c.label === "Email");
+const githubContact = CONTACT.find((c) => c.label === "GitHub");
+const linkedinContact = CONTACT.find((c) => c.label === "LinkedIn");
+
 export const metadata: Metadata = {
-  metadataBase: new URL("https://www.frankji.com"),
-  title: "Frank Ji | Front-End Developer — Angular, React & TypeScript",
-  description:
-    "Frank Ji is a front-end developer in New Zealand specialising in Angular, React, TypeScript, and SAP Composable Storefront. Building performant, accessible enterprise e-commerce and serverless web experiences.",
-  keywords: [
-    "Frank Ji",
-    "front-end developer",
-    "Angular developer",
-    "React developer",
-    "TypeScript",
-    "New Zealand",
-    "web developer",
-    "SAP Composable Storefront",
-    "Spartacus",
-    "Next.js",
-    "AWS",
-    "e-commerce developer",
-    "software engineer Auckland",
-  ],
-  authors: [{ name: "Frank Ji", url: "https://www.frankji.com" }],
-  creator: "Frank Ji",
-  alternates: {
-    canonical: "https://www.frankji.com",
-  },
-  verification: {
-    google: "4KPYDEWwqJxCzwzysop1BZMZc7HAIVdr9EwM2LZXEVk",
-  },
+  metadataBase: new URL(META.siteUrl),
+  title: META.seoTitle,
+  description: META.seoDescription,
+  keywords: META.seoKeywords,
+  authors: [{ name: META.name, url: META.siteUrl }],
+  creator: META.name,
+  alternates: { canonical: META.siteUrl },
+  verification: { google: META.googleVerification },
   openGraph: {
-    title: "Frank Ji | Front-End Developer — Angular, React & TypeScript",
-    description:
-      "Front-end developer in New Zealand building enterprise e-commerce platforms with Angular, React, and SAP Composable Storefront. View projects, experience, and skills.",
-    url: "https://www.frankji.com",
-    siteName: "Frank Ji — Portfolio",
+    title: META.seoTitle,
+    description: META.ogDescription,
+    url: META.siteUrl,
+    siteName: META.siteName,
     type: "website",
-    locale: "en_NZ",
-    images: [
-      {
-        url: "/og-image.png",
-        width: 1200,
-        height: 630,
-        alt: "Frank Ji — Front-End Developer Portfolio",
-      },
-    ],
+    locale: META.locale,
+    images: [{ url: "/og-image.png", width: 1200, height: 630, alt: `${META.name} — ${META.title} Portfolio` }],
   },
   twitter: {
     card: "summary_large_image",
-    title: "Frank Ji | Front-End Developer — Angular, React & TypeScript",
-    description:
-      "Front-end developer in New Zealand building enterprise e-commerce platforms and serverless applications.",
+    title: META.seoTitle,
+    description: META.twitterDescription,
     images: ["/og-image.png"],
   },
   robots: {
     index: true,
     follow: true,
-    googleBot: {
-      index: true,
-      follow: true,
-      "max-video-preview": -1,
-      "max-image-preview": "large",
-      "max-snippet": -1,
-    },
+    googleBot: { index: true, follow: true, "max-video-preview": -1, "max-image-preview": "large", "max-snippet": -1 },
   },
 };
 
 const jsonLd = {
   "@context": "https://schema.org",
   "@type": "Person",
-  name: "Frank Ji",
-  url: "https://www.frankji.com",
-  jobTitle: "Front-End Developer",
-  description:
-    "Front-end developer specialising in Angular, React, TypeScript, and enterprise e-commerce platforms.",
-  sameAs: [
-    "https://github.com/FrankJi1019",
-    "https://www.linkedin.com/in/frank-ji-1019",
-  ],
-  email: "frankjishiyuan@gmail.com",
-  knowsAbout: [
-    "Angular",
-    "React",
-    "TypeScript",
-    "SAP Composable Storefront",
-    "AWS",
-    "Next.js",
-    "Node.js",
-    "RxJS",
-    "NgRx",
-    "Tailwind CSS",
-    "GraphQL",
-    "DynamoDB",
-  ],
+  name: META.name,
+  url: META.siteUrl,
+  jobTitle: META.title,
+  description: `${META.title} specialising in Angular, React, TypeScript, and enterprise e-commerce platforms.`,
+  sameAs: [githubContact?.href, linkedinContact?.href].filter(Boolean),
+  email: emailContact?.display,
+  knowsAbout: SKILLS.flatMap((s) => s.items),
   hasOccupation: [
     {
       "@type": "Occupation",
-      name: "Front-End Developer",
+      name: META.title,
       occupationLocation: { "@type": "Country", name: "New Zealand" },
-      skills:
-        "Angular, React, TypeScript, SAP Composable Storefront, NgRx, RxJS",
+      skills: "Angular, React, TypeScript, SAP Composable Storefront, NgRx, RxJS",
     },
   ],
-  worksFor: {
-    "@type": "Organization",
-    name: "Mitre 10",
-    url: "https://www.mitre10.co.nz",
-  },
-  alumniOf: {
-    "@type": "EducationalOrganization",
-    name: "University of Auckland",
-    url: "https://www.auckland.ac.nz",
-  },
-  workLocation: {
-    "@type": "Place",
-    name: "New Zealand",
-  },
+  worksFor: { "@type": "Organization", name: "Mitre 10", url: "https://www.mitre10.co.nz" },
+  alumniOf: { "@type": "EducationalOrganization", name: "University of Auckland", url: "https://www.auckland.ac.nz" },
+  workLocation: { "@type": "Place", name: "New Zealand" },
 };
 
 const websiteJsonLd = {
   "@context": "https://schema.org",
   "@type": "WebSite",
-  name: "Frank Ji — Portfolio",
-  url: "https://www.frankji.com",
-  description:
-    "Personal portfolio of Frank Ji, a front-end developer based in New Zealand.",
+  name: META.siteName,
+  url: META.siteUrl,
+  description: `Personal portfolio of ${META.name}, a ${META.title.toLowerCase()} based in New Zealand.`,
 };
 
 export default function RootLayout({

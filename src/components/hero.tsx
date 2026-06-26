@@ -1,39 +1,39 @@
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faCircle } from "@fortawesome/free-solid-svg-icons";
+import { HERO, META } from "@/data/portfolio";
 
 export function Hero() {
   return (
     <section aria-label="Introduction" className="relative flex min-h-[60vh] flex-col justify-center py-16 sm:min-h-[calc(100vh-73px)] sm:py-20">
-      {/* Status badge */}
       <div className="mb-8 flex items-center gap-2 rounded-full border border-[var(--border)] px-3 py-1.5 w-fit font-mono">
         <FontAwesomeIcon icon={faCircle} className="text-[6px] text-emerald-400 animate-[pulse-dot_2s_ease-in-out_infinite]" />
-        <span className="text-xs text-accent">status: open_to_work</span>
+        <span className="text-xs text-accent">status: {HERO.statusText}</span>
       </div>
 
       <h1 className="text-5xl font-bold tracking-tight sm:text-7xl">
         <span className="name-flow bg-clip-text text-transparent">
-          Frank Ji
+          {HERO.heading}
         </span>
       </h1>
       <h2 className="mt-4 font-mono text-lg text-[var(--muted)] sm:text-xl">
-        &gt; front_end_developer
+        {HERO.subtitle}
       </h2>
       <p className="mt-6 max-w-lg text-[var(--muted)] leading-relaxed">
-        I build performant, accessible web experiences — from enterprise
-        e-commerce platforms to serverless side projects.
+        {HERO.tagline}
       </p>
       <div className="mt-4 flex flex-wrap gap-3 font-mono text-xs text-[var(--muted)]">
-        <span className="rounded border border-[var(--border)] px-2 py-1">Angular</span>
-        <span className="rounded border border-[var(--border)] px-2 py-1">React</span>
-        <span className="rounded border border-[var(--border)] px-2 py-1">TypeScript</span>
-        <span className="rounded border border-[var(--border)] px-2 py-1">AWS</span>
+        {HERO.techBadges.map((badge) => (
+          <span key={badge} className="rounded border border-[var(--border)] px-2 py-1">{badge}</span>
+        ))}
       </div>
       <div className="mt-10 flex gap-4">
         <a
-          href="#projects"
+          href={META.resumeUrl}
+          target="_blank"
+          rel="noopener noreferrer"
           className="rounded-md bg-accent px-5 py-2.5 text-sm font-medium text-white transition-all hover:bg-accent-hover hover:scale-105 hover:shadow-lg hover:shadow-accent/30"
         >
-          View Projects
+          View Resume
         </a>
         <a
           href="#contact"

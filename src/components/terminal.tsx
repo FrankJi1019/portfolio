@@ -1,7 +1,7 @@
 "use client";
 
 import { useState, useRef, useEffect, useCallback } from "react";
-import { ABOUT, EXPERIENCE, EDUCATION, PROJECTS, SKILLS, CONTACT } from "@/data/portfolio";
+import { ABOUT, EXPERIENCE, EDUCATION, PROJECTS, SKILLS, CONTACT, CERTIFICATIONS } from "@/data/portfolio";
 
 interface OutputLine {
   id: number;
@@ -16,15 +16,16 @@ const ASCII_BANNER = `  _____ ____    _    _   _ _  __    _ ___
  |_|   |_| \\_\\_/  \\_\\_| \\_|_|\\_\\\\___/|___|`;
 
 const HELP_TEXT = `Available commands:
-  about       — Who I am
-  experience  — Work history
-  education   — Academic background
-  projects    — Things I've built
-  skills      — Tech stack
-  contact     — Get in touch
-  clear       — Clear the terminal
-  exit        — Return to normal view
-  help        — Show this message`;
+  about          — Who I am
+  experience     — Work history
+  education      — Academic background
+  certifications — Credentials
+  projects       — Things I've built
+  skills         — Tech stack
+  contact        — Get in touch
+  clear          — Clear the terminal
+  exit           — Return to normal view
+  help           — Show this message`;
 
 function formatAbout(): string {
   return `━━━ ABOUT ME ━━━
@@ -79,6 +80,18 @@ function formatSkills(): string {
 ${entries}`;
 }
 
+function formatCertifications(): string {
+  const entries = CERTIFICATIONS.map((c) =>
+    `▸ ${c.name}
+  ${c.issuer}
+  Issued: ${c.issued} · Expires: ${c.expires}${c.credlyUrl ? `\n  ${c.credlyUrl}` : ""}
+`
+  ).join("\n");
+  return `━━━ CERTIFICATIONS ━━━
+
+${entries}`;
+}
+
 function formatContact(): string {
   const entries = CONTACT.map((c) => `▸ ${c.label}: ${c.display}`).join("\n");
   return `━━━ CONTACT ━━━
@@ -97,6 +110,8 @@ function processCommand(input: string): { text: string; type: "response" | "erro
       return { text: formatExperience(), type: "response" };
     case "education":
       return { text: formatEducation(), type: "response" };
+    case "certifications":
+      return { text: formatCertifications(), type: "response" };
     case "projects":
       return { text: formatProjects(), type: "response" };
     case "skills":
