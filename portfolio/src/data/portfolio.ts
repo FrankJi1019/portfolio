@@ -105,7 +105,7 @@ function formatPeriod(startDate: string, endDate: string, isCurrentRole?: boolea
 }
 
 export async function fetchPortfolioData(): Promise<PortfolioData> {
-  const res = await fetch(API_URL, { next: { revalidate: 3600 } });
+  const res = await fetch(API_URL, { cache: 'no-store' });
 
   if (!res.ok) {
     throw new Error(`Failed to fetch portfolio data: ${res.status}`);
