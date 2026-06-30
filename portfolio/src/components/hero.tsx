@@ -1,34 +1,39 @@
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faCircle } from "@fortawesome/free-solid-svg-icons";
-import { HERO, META } from "@/data/portfolio";
+import type { HeroData } from "@/data/portfolio";
 
-export function Hero() {
+interface HeroProps {
+  hero: HeroData;
+  resumeUrl: string;
+}
+
+export function Hero({ hero, resumeUrl }: HeroProps) {
   return (
     <section aria-label="Introduction" className="relative flex min-h-[60vh] flex-col justify-center py-16 sm:min-h-[calc(100vh-73px)] sm:py-20">
       <div className="mb-8 flex items-center gap-2 rounded-full border border-[var(--border)] px-3 py-1.5 w-fit font-mono">
         <FontAwesomeIcon icon={faCircle} className="text-[6px] text-emerald-400 animate-[pulse-dot_2s_ease-in-out_infinite]" />
-        <span className="text-xs text-accent">status: {HERO.statusText}</span>
+        <span className="text-xs text-accent">status: {hero.statusText}</span>
       </div>
 
       <h1 className="text-5xl font-bold tracking-tight sm:text-7xl">
         <span className="name-flow bg-clip-text text-transparent">
-          {HERO.heading}
+          {hero.heading}
         </span>
       </h1>
       <h2 className="mt-4 font-mono text-lg text-[var(--muted)] sm:text-xl">
-        {HERO.subtitle}
+        &gt; {hero.subtitle}
       </h2>
       <p className="mt-6 max-w-lg text-[var(--muted)] leading-relaxed">
-        {HERO.tagline}
+        {hero.tagline}
       </p>
       <div className="mt-4 flex flex-wrap gap-3 font-mono text-xs text-[var(--muted)]">
-        {HERO.techBadges.map((badge) => (
+        {hero.techBadges.map((badge) => (
           <span key={badge} className="rounded border border-[var(--border)] px-2 py-1">{badge}</span>
         ))}
       </div>
       <div className="mt-10 flex gap-4">
         <a
-          href={META.resumeUrl}
+          href={resumeUrl}
           target="_blank"
           rel="noopener noreferrer"
           className="rounded-md bg-accent px-5 py-2.5 text-sm font-medium text-white transition-all hover:bg-accent-hover hover:scale-105 hover:shadow-lg hover:shadow-accent/30"

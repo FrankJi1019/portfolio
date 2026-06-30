@@ -1,8 +1,10 @@
+"use client";
+
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faEnvelope, faAward } from "@fortawesome/free-solid-svg-icons";
 import { faGithub, faLinkedin } from "@fortawesome/free-brands-svg-icons";
 import type { IconDefinition } from "@fortawesome/fontawesome-svg-core";
-import { CONTACT, META } from "@/data/portfolio";
+import { usePortfolioData } from "./portfolio-data-provider";
 
 const ICONS: Record<string, IconDefinition> = {
   Email: faEnvelope,
@@ -12,12 +14,14 @@ const ICONS: Record<string, IconDefinition> = {
 };
 
 export function Footer() {
+  const { contact, meta } = usePortfolioData();
+
   return (
     <footer className="border-t border-[var(--border)] py-8">
       <div className="mx-auto flex max-w-5xl flex-col items-center gap-4 px-6 sm:flex-row sm:justify-between">
-        <p className="text-sm text-[var(--muted)]">© {new Date().getFullYear()} {META.name}</p>
+        <p className="text-sm text-[var(--muted)]">© {new Date().getFullYear()} {meta.name}</p>
         <nav aria-label="Social links" className="flex gap-6">
-          {CONTACT.map((link) => (
+          {contact.map((link) => (
             <a
               key={link.label}
               href={link.href}

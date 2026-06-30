@@ -17,7 +17,7 @@ import {
 import { faGithub, faLinkedin } from "@fortawesome/free-brands-svg-icons";
 import type { IconDefinition } from "@fortawesome/fontawesome-svg-core";
 import { useTerminalMode } from "./terminal-mode-provider";
-import { CONTACT, NAV_LINKS } from "@/data/portfolio";
+import { usePortfolioData } from "./portfolio-data-provider";
 
 interface Command {
   id: string;
@@ -53,34 +53,35 @@ const LINK_ICONS: Record<string, IconDefinition> = {
   Credly: faAward,
 };
 
-const NAV_COMMANDS: Command[] = NAV_LINKS.map((link) => ({
-  id: link.label.toLowerCase(),
-  label: link.label,
-  shortcut: `/${link.label.toLowerCase()}`,
-  icon: NAV_ICONS[link.label] ?? faUser,
-  group: "Navigation",
-  action: () => navigate(link.href),
-}));
-
-const LINK_COMMANDS: Command[] = CONTACT.map((c) => ({
-  id: c.label.toLowerCase(),
-  label: c.label,
-  shortcut: `/${c.label.toLowerCase()}`,
-  icon: LINK_ICONS[c.label] ?? faEnvelope,
-  group: "Links",
-  action: () => openLink(c.href),
-}));
-
 export function CommandPalette() {
   const [isOpen, setIsOpen] = useState(false);
   const [query, setQuery] = useState("");
   const [activeIndex, setActiveIndex] = useState(0);
   const inputRef = useRef<HTMLInputElement>(null);
   const { isTerminalMode, toggleTerminalMode } = useTerminalMode();
+  const { navLinks, contact } = usePortfolioData();
+
+  const navCommands: Command[] = navLinks.map((link) => ({
+    id: link.label.toLowerCase(),
+    label: link.label,
+    shortcut: `/${link.label.toLowerCase()}`,
+    icon: NAV_ICONS[link.label] ?? faUser,
+    group: "Navigation",
+    action: () => navigate(link.href),
+  }));
+
+  const linkCommands: Command[] = contact.map((c) => ({
+    id: c.label.toLowerCase(),
+    label: c.label,
+    shortcut: `/${c.label.toLowerCase()}`,
+    icon: LINK_ICONS[c.label] ?? faEnvelope,
+    group: "Links",
+    action: () => openLink(c.href),
+  }));
 
   const allCommands: Command[] = [
-    ...NAV_COMMANDS,
-    ...LINK_COMMANDS,
+    ...navCommands,
+    ...linkCommands,
     {
       id: "terminal",
       label: isTerminalMode ? "Exit Terminal" : "Open Terminal",

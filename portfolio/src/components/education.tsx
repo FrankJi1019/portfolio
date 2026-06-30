@@ -1,13 +1,17 @@
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faGraduationCap } from "@fortawesome/free-solid-svg-icons";
-import { EDUCATION } from "@/data/portfolio";
+import type { EducationEntry } from "@/data/portfolio";
 
-export function Education() {
+interface EducationProps {
+  education: EducationEntry[];
+}
+
+export function Education({ education }: EducationProps) {
   return (
     <section id="education" aria-label="Education" className="py-20">
       <h2 className="text-2xl font-bold">Education</h2>
       <div className="mt-8 space-y-10">
-        {EDUCATION.map((edu) => (
+        {education.map((edu) => (
           <article key={edu.institution} className="relative pl-6 border-l-2 border-[var(--border)]">
             <div className="absolute -left-[7px] top-1.5 h-3 w-3 rounded-full border-2 border-accent bg-[var(--background)]" />
             <div className="flex items-center gap-2">

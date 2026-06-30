@@ -1,7 +1,7 @@
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faEnvelope, faAward } from "@fortawesome/free-solid-svg-icons";
 import { faGithub, faLinkedin } from "@fortawesome/free-brands-svg-icons";
-import { CONTACT } from "@/data/portfolio";
+import type { ContactLink } from "@/data/portfolio";
 
 const ICONS: Record<string, typeof faEnvelope> = {
   Email: faEnvelope,
@@ -10,7 +10,11 @@ const ICONS: Record<string, typeof faEnvelope> = {
   Credly: faAward,
 };
 
-export function Contact() {
+interface ContactProps {
+  contact: ContactLink[];
+}
+
+export function Contact({ contact }: ContactProps) {
   return (
     <section id="contact" aria-label="Contact information" className="py-20">
       <h2 className="text-2xl font-bold">Get in Touch</h2>
@@ -19,7 +23,7 @@ export function Contact() {
         Feel free to reach out.
       </p>
       <ul className="mt-8 space-y-3">
-        {CONTACT.map((link) => (
+        {contact.map((link) => (
           <li key={link.label} className="flex items-center gap-3">
             <FontAwesomeIcon icon={ICONS[link.label]} className="h-4 w-4 text-[var(--muted)]" />
             <a

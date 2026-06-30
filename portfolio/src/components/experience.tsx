@@ -1,11 +1,15 @@
-import { EXPERIENCE } from "@/data/portfolio";
+import type { Role } from "@/data/portfolio";
 
-export function Experience() {
+interface ExperienceProps {
+  experience: Role[];
+}
+
+export function Experience({ experience }: ExperienceProps) {
   return (
     <section id="experience" aria-label="Work experience" className="py-20">
       <h2 className="text-2xl font-bold">Experience</h2>
       <div className="mt-8 space-y-10">
-        {EXPERIENCE.map((role) => (
+        {experience.map((role) => (
           <article key={`${role.company}-${role.period}`} className="relative pl-6 border-l-2 border-[var(--border)]">
             <div className="absolute -left-[7px] top-1.5 h-3 w-3 rounded-full border-2 border-accent bg-[var(--background)]" />
             <p className="font-mono text-xs text-accent">

@@ -1,14 +1,18 @@
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faArrowUpRightFromSquare } from "@fortawesome/free-solid-svg-icons";
-import { PROJECTS } from "@/data/portfolio";
+import type { Project } from "@/data/portfolio";
 import { TiltCard } from "./tilt-card";
 
-export function Projects() {
+interface ProjectsProps {
+  projects: Project[];
+}
+
+export function Projects({ projects }: ProjectsProps) {
   return (
     <section id="projects" aria-label="Projects" className="py-20">
       <h2 className="text-2xl font-bold">Projects</h2>
       <div className="mt-8 space-y-4">
-        {PROJECTS.map((project) => (
+        {projects.map((project) => (
           <TiltCard key={project.title}>
             <article
               className="card-glow rounded-lg border border-[var(--border)] bg-[var(--card)] p-6 hover:border-accent"

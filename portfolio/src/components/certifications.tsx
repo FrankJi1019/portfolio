@@ -1,14 +1,18 @@
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faCertificate, faArrowUpRightFromSquare } from "@fortawesome/free-solid-svg-icons";
-import { CERTIFICATIONS } from "@/data/portfolio";
+import type { Certification } from "@/data/portfolio";
 import { TiltCard } from "./tilt-card";
 
-export function Certifications() {
+interface CertificationsProps {
+  certifications: Certification[];
+}
+
+export function Certifications({ certifications }: CertificationsProps) {
   return (
     <section id="certifications" aria-label="Certifications" className="py-20">
       <h2 className="text-2xl font-bold">Certifications</h2>
       <div className="mt-8 grid gap-4 sm:grid-cols-2">
-        {CERTIFICATIONS.map((cert) => (
+        {certifications.map((cert) => (
           <TiltCard key={cert.name}>
             <a
               href={cert.credlyUrl ?? "#"}

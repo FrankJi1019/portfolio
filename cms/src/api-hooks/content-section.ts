@@ -5,7 +5,7 @@ export const useFetchContentSection = (section: string) => {
     const query = useQuery({
         queryKey: [`section-content-${section}`],
         queryFn: async () => {
-            const { data } = await apiClient.get(`section/${section}`)
+            const { data } = await apiClient.get(`sections/${section}`)
             return data
         }
     })
@@ -15,7 +15,7 @@ export const useFetchContentSection = (section: string) => {
 export const useUpdateContentSection = () => {
     const mutation = useMutation({
         mutationFn: async ({content, section}: {content: any, section: string}) => {
-            const { data } = await apiClient.put(`section/${section}`, content)
+            const { data } = await apiClient.put(`sections/${section}`, content)
             return data
         }
     })

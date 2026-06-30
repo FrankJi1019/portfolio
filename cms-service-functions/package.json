@@ -11,7 +11,9 @@
     "build:portfolio-sync-resume": "esbuild src/portfolio-sync-resume.ts --bundle --platform=node --target=node22 --outfile=dist/portfolio-sync-resume/index.js",
     "deploy:portfolio-sync-resume": "cd dist/portfolio-sync-resume && zip function.zip index.js && aws lambda update-function-code --function-name portfolio-sync-resume --zip-file fileb://function.zip",
     "build:portfolio-list-resumes": "esbuild src/portfolio-list-resumes.ts --bundle --platform=node --target=node22 --outfile=dist/portfolio-list-resumes/index.js",
-    "deploy:portfolio-list-resumes": "cd dist/portfolio-list-resumes && zip function.zip index.js && aws lambda update-function-code --function-name portfolio-list-resumes --zip-file fileb://function.zip"
+    "deploy:portfolio-list-resumes": "cd dist/portfolio-list-resumes && zip function.zip index.js && aws lambda update-function-code --function-name portfolio-list-resumes --zip-file fileb://function.zip",
+    "build:portfolio-fetch-all": "esbuild src/portfolio-fetch-all.ts --bundle --platform=node --target=node22 --outfile=dist/portfolio-fetch-all/index.js",
+    "deploy:portfolio-fetch-all": "cd dist/portfolio-fetch-all && zip function.zip index.js && aws lambda update-function-code --function-name portfolio-fetch-all --zip-file fileb://function.zip --profile personal"
   },
   "keywords": [],
   "author": "",

@@ -1,7 +1,8 @@
 "use client";
 
 import { useState, useRef, useEffect, useCallback } from "react";
-import { ABOUT, EXPERIENCE, EDUCATION, PROJECTS, SKILLS, CONTACT, CERTIFICATIONS } from "@/data/portfolio";
+import { usePortfolioData } from "./portfolio-data-provider";
+import type { PortfolioData } from "@/data/portfolio";
 
 interface OutputLine {
   id: number;
@@ -27,97 +28,69 @@ const HELP_TEXT = `Available commands:
   exit           — Return to normal view
   help           — Show this message`;
 
-function formatAbout(): string {
-  return `━━━ ABOUT ME ━━━
-
-${ABOUT.replace(/\n\n/g, " ")}`;
+function formatAbout(data: PortfolioData): string {
+  return `━━━ ABOUT ME ━━━\n\n${data.about.replace(/\n\n/g, " ")}`;
 }
 
-function formatExperience(): string {
-  const entries = EXPERIENCE.map((role) =>
-    `▸ ${role.title} @ ${role.company}
-  ${role.period}
-${role.points.map((p) => `  • ${p}`).join("\n")}
-`
+function formatExperience(data: PortfolioData): string {
+  const entries = data.experience.map((role) =>
+    `▸ ${role.title} @ ${role.company}\n  ${role.period}\n${role.points.map((p) => `  • ${p}`).join("\n")}\n`
   ).join("\n");
-  return `━━━ WORK EXPERIENCE ━━━
-
-${entries}`;
+  return `━━━ WORK EXPERIENCE ━━━\n\n${entries}`;
 }
 
-function formatEducation(): string {
-  const entries = EDUCATION.map((edu) =>
-    `▸ ${edu.institution}
-  ${edu.degree}
-  ${edu.period}
-${edu.achievements.map((a) => `  • ${a}`).join("\n")}
-`
+function formatEducation(data: PortfolioData): string {
+  const entries = data.education.map((edu) =>
+    `▸ ${edu.institution}\n  ${edu.degree}\n  ${edu.period}\n${edu.achievements.map((a) => `  • ${a}`).join("\n")}\n`
   ).join("\n");
-  return `━━━ EDUCATION ━━━
-
-${entries}`;
+  return `━━━ EDUCATION ━━━\n\n${entries}`;
 }
 
-function formatProjects(): string {
-  const entries = PROJECTS.map((p) =>
-    `▸ ${p.title}
-  ${p.description}
-  Tech: ${p.tech.join(" · ")}${p.link ? `\n  Link: ${p.link}` : ""}
-`
+function formatProjects(data: PortfolioData): string {
+  const entries = data.projects.map((p) =>
+    `▸ ${p.title}\n  ${p.description}\n  Tech: ${p.tech.join(" · ")}${p.link ? `\n  Link: ${p.link}` : ""}\n`
   ).join("\n");
-  return `━━━ PROJECTS ━━━
-
-${entries}`;
+  return `━━━ PROJECTS ━━━\n\n${entries}`;
 }
 
-function formatSkills(): string {
-  const entries = SKILLS.map((cat) =>
-    `▸ ${cat.label}
-  ${cat.items.join(" · ")}`
+function formatSkills(data: PortfolioData): string {
+  const entries = data.skills.map((cat) =>
+    `▸ ${cat.label}\n  ${cat.items.join(" · ")}`
   ).join("\n\n");
-  return `━━━ SKILLS ━━━
-
-${entries}`;
+  return `━━━ SKILLS ━━━\n\n${entries}`;
 }
 
-function formatCertifications(): string {
-  const entries = CERTIFICATIONS.map((c) =>
-    `▸ ${c.name}
-  ${c.issuer}
-  Issued: ${c.issued} · Expires: ${c.expires}${c.credlyUrl ? `\n  ${c.credlyUrl}` : ""}
-`
+function formatCertifications(data: PortfolioData): string {
+  const entries = data.certifications.map((c) =>
+    `▸ ${c.name}\n  ${c.issuer}\n  Issued: ${c.issued} · Expires: ${c.expires}${c.credlyUrl ? `\n  ${c.credlyUrl}` : ""}\n`
   ).join("\n");
-  return `━━━ CERTIFICATIONS ━━━
-
-${entries}`;
+  return `━━━ CERTIFICATIONS ━━━\n\n${entries}`;
 }
 
-function formatContact(): string {
-  const entries = CONTACT.map((c) => `▸ ${c.label}: ${c.display}`).join("\n");
-  return `━━━ CONTACT ━━━
-
-${entries}`;
+function formatContact(data: PortfolioData): string {
+  const entries = data.contact.map((c) => `▸ ${c.label}: ${c.display}`).join("\n");
+  return `━━━ CONTACT ━━━\n\n${entries}`;
 }
 
-function processCommand(input: string): { text: string; type: "response" | "error" | "ascii" } {
+function processCommand(input: string, data: PortfolioData): { text: string; type: "response" | "error" | "ascii" } {
   const cmd = input.trim().toLowerCase();
   switch (cmd) {
     case "help":
       return { text: HELP_TEXT, type: "response" };
     case "about":
-      return { text: formatAbout(), type: "response" };
+      return { text: formatAbout(data), type: "response" };
     case "experience":
-      return { text: formatExperience(), type: "response" };
+      return { text: formatExperience(data), type: "response" };
     case "education":
-      return { text: formatEducation(), type: "response" };
+      return { text: formatEducation(data), type: "response" };
     case "certifications":
-      return { text: formatCertifications(), type: "response" };
+      return { text: formatCertifications(data), type: "response" };
     case "projects":
-      return { text: formatProjects(), type: "response" };
+      return { text: formatProjects(data), type: "response" };
     case "skills":
-      return { text: formatSkills(), type: "response" };
+      return { text: formatSkills(data), type: "response" };
     case "contact":
-      return { text: formatContact(), type: "response" };
+      return { text: formatContact(data), type: "response" };
     case "":
       return { text: "", type: "response" };
     default:
@@ -126,6 +99,7 @@ function processCommand(input: string): { text: string; type: "response" | "erro
 }
 
 export function Terminal({ onExit }: { onExit: () => void }) {
+  const portfolioData = usePortfolioData();
   const [output, setOutput] = useState<OutputLine[]>([
     { id: 0, type: "ascii", text: ASCII_BANNER },
     { id: 1, type: "response", text: 'Welcome to Frank Ji\'s portfolio. Type "help" to get started.' },
@@ -166,14 +140,14 @@ export function Terminal({ onExit }: { onExit: () => void }) {
       return;
     }
 
-    const result = processCommand(cmd);
+    const result = processCommand(cmd, portfolioData);
     const responseLine: OutputLine = { id: idRef.current++, type: result.type, text: result.text };
 
     setOutput((prev) => [...prev, commandLine, ...(result.text ? [responseLine] : [])]);
     if (cmd.trim()) setHistory((h) => [...h, cmd]);
     setHistoryIndex(-1);
     setInput("");
-  }, [input, onExit]);
+  }, [input, onExit, portfolioData]);
 
   const handleKeyDown = (e: React.KeyboardEvent) => {
     if (e.key === "ArrowUp") {

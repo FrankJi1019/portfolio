@@ -4,11 +4,12 @@ import { useState } from "react";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faBars, faXmark, faTerminal, faDesktop } from "@fortawesome/free-solid-svg-icons";
 import { useTerminalMode } from "./terminal-mode-provider";
-import { NAV_LINKS } from "@/data/portfolio";
+import { usePortfolioData } from "./portfolio-data-provider";
 
 export function Header() {
   const [isOpen, setIsOpen] = useState(false);
   const { isTerminalMode, toggleTerminalMode } = useTerminalMode();
+  const { navLinks } = usePortfolioData();
 
   return (
     <header className="sticky top-0 z-50 border-b border-[var(--border)] bg-[var(--background)]/80 backdrop-blur-sm">
@@ -24,10 +25,9 @@ export function Header() {
         </a>
 
         <div className="flex items-center gap-4">
-          {/* Desktop nav — hidden in terminal mode */}
           {!isTerminalMode && (
             <div className="hidden items-center gap-6 md:flex">
-              {NAV_LINKS.map((link) => (
+              {navLinks.map((link) => (
                 <a
                   key={link.href}
                   href={link.href}
@@ -39,7 +39,6 @@ export function Header() {
             </div>
           )}
 
-          {/* Terminal toggle */}
           <button
             onClick={toggleTerminalMode}
             aria-label={isTerminalMode ? "Switch to normal view" : "Switch to terminal view"}
@@ -49,7 +48,6 @@ export function Header() {
             <FontAwesomeIcon icon={isTerminalMode ? faDesktop : faTerminal} className="h-4 w-4" />
           </button>
 
-          {/* Mobile hamburger — hidden in terminal mode */}
           {!isTerminalMode && (
             <button
               onClick={() => setIsOpen(!isOpen)}
@@ -62,10 +60,9 @@ export function Header() {
         </div>
       </nav>
 
-      {/* Mobile menu */}
       {isOpen && !isTerminalMode && (
         <div className="absolute left-0 right-0 top-full border-t border-[var(--border)] bg-[var(--background)] px-6 py-4 shadow-lg md:hidden">
-          {NAV_LINKS.map((link) => (
+          {navLinks.map((link) => (
             <a
               key={link.href}
               href={link.href}
