@@ -1,0 +1,30 @@
+{
+  "name": "cms-service-functions",
+  "version": "1.0.0",
+  "description": "",
+  "type": "module",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "build:portfolio-sections": "esbuild src/portfolio-sections.ts --bundle --platform=node --target=node22 --outfile=dist/portfolio-sections/index.js",
+    "deploy:portfolio-sections": "cd dist/portfolio-sections && zip function.zip index.js && aws lambda update-function-code --function-name portfolio-sections --zip-file fileb://function.zip",
+    "build:portfolio-sync-resume": "esbuild src/portfolio-sync-resume.ts --bundle --platform=node --target=node22 --outfile=dist/portfolio-sync-resume/index.js",
+    "deploy:portfolio-sync-resume": "cd dist/portfolio-sync-resume && zip function.zip index.js && aws lambda update-function-code --function-name portfolio-sync-resume --zip-file fileb://function.zip",
+    "build:portfolio-list-resumes": "esbuild src/portfolio-list-resumes.ts --bundle --platform=node --target=node22 --outfile=dist/portfolio-list-resumes/index.js",
+    "deploy:portfolio-list-resumes": "cd dist/portfolio-list-resumes && zip function.zip index.js && aws lambda update-function-code --function-name portfolio-list-resumes --zip-file fileb://function.zip"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "devDependencies": {
+    "esbuild": "^0.28.1",
+    "typescript": "^6.0.3"
+  },
+  "dependencies": {
+    "@aws-sdk/client-s3": "^3.1076.0",
+    "@aws-sdk/client-ssm": "^3.1076.0",
+    "@types/aws-lambda": "^8.10.162",
+    "axios": "^1.18.1",
+    "google-auth-library": "^10.9.0"
+  }
+}

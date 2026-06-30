@@ -64,9 +64,59 @@ export interface ContactLink {
   display: string
 }
 
+export interface DriveFile {
+  mimeType: string
+  parents: string[]
+  id: string
+  name: string
+}
+
+export interface ResumeData {
+  files: DriveFile[]
+  selectedFileId: string
+}
+
 export interface NavLink {
   href: string
   label: string
+}
+
+// Backend response shapes (matches JSON structure returned by API)
+
+export interface HeroResponse {
+  heroStatusText: string
+  heroHeading: string
+  heroSubtitle: string
+  heroTagline: string
+  heroTechBadges: string[]
+}
+
+export interface AboutResponse {
+  about: string
+}
+
+export interface ExperienceResponse {
+  experience: Role[]
+}
+
+export interface EducationResponse {
+  education: EducationEntry[]
+}
+
+export interface ProjectsResponse {
+  projects: Project[]
+}
+
+export interface SkillsResponse {
+  skills: SkillCategory[]
+}
+
+export interface CertificationsResponse {
+  certifications: Certification[]
+}
+
+export interface ContactResponse {
+  contact: ContactLink[]
 }
 
 export interface PortfolioContent {

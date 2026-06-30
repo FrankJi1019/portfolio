@@ -2,7 +2,7 @@ import { NavLink } from "react-router-dom"
 import { Routes } from "../routes/routes"
 import { useTheme } from "../providers/ThemeProvider"
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome"
-import { faStar, faBriefcase, faGraduationCap, faCode, faCubes, faCertificate, faAddressBook, faMagnifyingGlass, faFileArrowUp, faFeather, faCircleHalfStroke, faCloudArrowUp, faRotateLeft } from "@fortawesome/free-solid-svg-icons"
+import { faStar, faBriefcase, faGraduationCap, faCode, faCubes, faCertificate, faAddressBook, faMagnifyingGlass, faFileArrowUp, faFeather, faCircleHalfStroke } from "@fortawesome/free-solid-svg-icons"
 import type { IconDefinition } from "@fortawesome/fontawesome-svg-core"
 
 const navItems: { path: string; label: string; icon: IconDefinition }[] = [
@@ -39,28 +39,6 @@ const Sidebar = () => {
             <h1 className="text-sm font-bold text-gray-900 dark:text-white leading-tight">Portfolio CMS</h1>
             <a href="https://www.frankji.com" target="_blank" rel="noopener noreferrer" className="text-[10px] text-gray-400 dark:text-gray-600 hover:text-blue-500 dark:hover:text-blue-400 transition-colors">frankji.com</a>
           </div>
-        </div>
-      </div>
-
-      {/* Sync / Revert */}
-      <div className="flex gap-2 px-3 mb-6">
-        <div className="relative group flex-1">
-          <button className="w-full inline-flex items-center justify-center gap-1.5 px-3 py-2 text-[11px] font-semibold text-white bg-gradient-to-r from-blue-500 to-blue-600 hover:from-blue-600 hover:to-blue-700 rounded-lg transition-all shadow-sm hover:shadow-md">
-            <FontAwesomeIcon icon={faCloudArrowUp} className="text-[10px]" />
-            Sync
-          </button>
-          <span className="absolute bottom-full left-1/2 -translate-x-1/2 mb-2 px-3 py-1.5 bg-gray-900 dark:bg-gray-700 text-white text-[10px] rounded-lg whitespace-nowrap opacity-0 pointer-events-none group-hover:opacity-100 transition-opacity shadow-lg">
-            Promote staged changes to online
-          </span>
-        </div>
-        <div className="relative group flex-1">
-          <button className="w-full inline-flex items-center justify-center gap-1.5 px-3 py-2 text-[11px] font-semibold text-gray-600 dark:text-gray-300 bg-gray-100 dark:bg-gray-800 hover:bg-gray-200 dark:hover:bg-gray-700 rounded-lg transition-all">
-            <FontAwesomeIcon icon={faRotateLeft} className="text-[10px]" />
-            Revert
-          </button>
-          <span className="absolute bottom-full left-1/2 -translate-x-1/2 mb-2 px-3 py-1.5 bg-gray-900 dark:bg-gray-700 text-white text-[10px] rounded-lg whitespace-nowrap opacity-0 pointer-events-none group-hover:opacity-100 transition-opacity shadow-lg">
-            Revert all changes since last sync
-          </span>
         </div>
       </div>
 

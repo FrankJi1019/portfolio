@@ -12,6 +12,7 @@ import ContactPage from "./pages/ContactPage"
 import SeoPage from "./pages/SeoPage"
 import ResumePage from "./pages/ResumePage"
 
+
 const App = () => {
   return (
     <div className="flex h-screen bg-[#fafbfc] dark:bg-[#0f1117]">

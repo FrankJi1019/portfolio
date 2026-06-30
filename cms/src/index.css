@@ -34,3 +34,14 @@ main::-webkit-scrollbar-thumb:hover {
 ::selection {
   background-color: rgba(99, 102, 241, 0.15);
 }
+
+@keyframes slideIn {
+  from {
+    opacity: 0;
+    transform: translateX(1rem);
+  }
+  to {
+    opacity: 1;
+    transform: translateX(0);
+  }
+}

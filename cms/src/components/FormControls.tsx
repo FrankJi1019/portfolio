@@ -1,8 +1,31 @@
-import { useState } from "react"
+import { useEffect, useState } from "react"
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome"
-import { faXmark, faPlus, faCircleQuestion, faFloppyDisk, faRotateLeft } from "@fortawesome/free-solid-svg-icons"
+import { faXmark, faPlus, faCircleQuestion, faFloppyDisk, faRotateLeft, faCheck } from "@fortawesome/free-solid-svg-icons"
 
-export const PageHeader = ({ title, description, onAdd, onRevert }: { title: string; description?: string; onAdd?: () => void; onRevert?: () => void }) => (
+export const SaveNotification = ({ isVisible, onDismiss }: { isVisible: boolean; onDismiss: () => void }) => {
+  useEffect(() => {
+    if (isVisible) {
+      const timer = setTimeout(onDismiss, 3000)
+      return () => clearTimeout(timer)
+    }
+  }, [isVisible, onDismiss])
+
+  if (!isVisible) return null
+
+  return (
+    <div className="fixed top-6 right-6 z-50 animate-[slideIn_0.3s_ease-out] flex items-center gap-2.5 px-5 py-3 bg-emerald-50 dark:bg-emerald-950/40 border border-emerald-200/60 dark:border-emerald-800/30 rounded-xl shadow-lg shadow-emerald-100/50 dark:shadow-emerald-900/20">
+      <span className="w-5 h-5 flex items-center justify-center rounded-full bg-emerald-500 text-white">
+        <FontAwesomeIcon icon={faCheck} className="text-[9px]" />
+      </span>
+      <span className="text-sm font-medium text-emerald-700 dark:text-emerald-300">Changes saved</span>
+      <button onClick={onDismiss} className="ml-2 text-emerald-400 hover:text-emerald-600 dark:hover:text-emerald-200 transition-colors">
+        <FontAwesomeIcon icon={faXmark} className="text-xs" />
+      </button>
+    </div>
+  )
+}
+
+export const PageHeader = ({ title, description, onAdd, onRevert, onSave, isSaveDisabled }: { title: string; description?: string; onAdd?: () => void; onRevert?: () => void; onSave?: () => void; isSaveDisabled?: boolean }) => (
   <div className="mb-10">
     <div className="flex items-center justify-between">
       <h1 className="text-[26px] font-extrabold tracking-tight text-gray-900 dark:text-white">{title}</h1>
@@ -19,10 +42,12 @@ export const PageHeader = ({ title, description, onAdd, onRevert }: { title: str
             Revert
           </button>
         )}
-        <button className="inline-flex items-center gap-1.5 text-xs font-semibold text-white bg-gradient-to-r from-blue-500 to-blue-600 hover:from-blue-600 hover:to-blue-700 px-4 py-2.5 rounded-full transition-all shadow-md shadow-blue-200/40 dark:shadow-blue-900/30 hover:scale-[1.02] active:scale-[0.98]">
-          <FontAwesomeIcon icon={faFloppyDisk} className="text-[10px]" />
-          Save
-        </button>
+        {onSave && (
+          <button onClick={onSave} disabled={isSaveDisabled} className="inline-flex items-center gap-1.5 text-xs font-semibold text-white bg-gradient-to-r from-blue-500 to-blue-600 hover:from-blue-600 hover:to-blue-700 px-4 py-2.5 rounded-full transition-all shadow-md shadow-blue-200/40 dark:shadow-blue-900/30 hover:scale-[1.02] active:scale-[0.98] disabled:opacity-40 disabled:cursor-not-allowed disabled:hover:scale-100">
+            <FontAwesomeIcon icon={faFloppyDisk} className="text-[10px]" />
+            Save
+          </button>
+        )}
       </div>
     </div>
     {description && <p className="text-[13px] text-gray-400 dark:text-gray-500 mt-1.5">{description}</p>}
