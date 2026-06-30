@@ -2,6 +2,7 @@ import type { FC } from "react"
 import { useForm, useFieldArray, Controller } from "react-hook-form"
 import type { ExperienceResponse, Role } from "../../types/portfolio"
 import { PageHeader, EntryCard, Field, DateField, SaveNotification } from "../../components/FormControls"
+import { SortableList, SortableItem } from "../../components/SortableList"
 import { useSaveHandler } from "../../hooks/useSaveHandler"
 
 interface ExperiencePageProps {
@@ -23,7 +24,7 @@ const ExperiencePage: FC<ExperiencePageProps> = ({ content, onSave }) => {
     defaultValues: content,
   })
 
-  const { fields, prepend, remove } = useFieldArray({ control, name: "experience" })
+  const { fields, prepend, remove, move } = useFieldArray({ control, name: "experience" })
   const { handleSave, showNotification, dismissNotification } = useSaveHandler(onSave, reset)
 
   return (
@@ -36,73 +37,77 @@ const ExperiencePage: FC<ExperiencePageProps> = ({ content, onSave }) => {
         onSave={handleSubmit(handleSave)}
         isSaveDisabled={!isDirty}
       />
-      <div className="space-y-4">
-        {fields.map((field, i) => {
-          const isCurrentRole = watch(`experience.${i}.isCurrentRole`)
-          return (
-            <EntryCard key={field.id} onRemove={() => remove(i)}>
-              <div className="grid grid-cols-2 gap-4">
-                <Controller
-                  name={`experience.${i}.title`}
-                  control={control}
-                  render={({ field }) => (
-                    <Field label="Job Title" value={field.value} onChange={field.onChange} />
-                  )}
-                />
-                <Controller
-                  name={`experience.${i}.company`}
-                  control={control}
-                  render={({ field }) => (
-                    <Field label="Company" value={field.value} onChange={field.onChange} />
-                  )}
-                />
-              </div>
-              <div className="grid grid-cols-2 gap-4 mt-4">
-                <Controller
-                  name={`experience.${i}.startDate`}
-                  control={control}
-                  render={({ field }) => (
-                    <DateField label="Start Date" value={field.value} onChange={field.onChange} />
-                  )}
-                />
-                {!isCurrentRole && (
+      <SortableList items={fields} onReorder={move}>
+        <div className="space-y-4 pl-8">
+          {fields.map((field, i) => {
+            const isCurrentRole = watch(`experience.${i}.isCurrentRole`)
+            return (
+              <SortableItem key={field.id} id={field.id}>
+                <EntryCard onRemove={() => remove(i)}>
+                  <div className="grid grid-cols-2 gap-4">
+                    <Controller
+                      name={`experience.${i}.title`}
+                      control={control}
+                      render={({ field }) => (
+                        <Field label="Job Title" value={field.value} onChange={field.onChange} />
+                      )}
+                    />
+                    <Controller
+                      name={`experience.${i}.company`}
+                      control={control}
+                      render={({ field }) => (
+                        <Field label="Company" value={field.value} onChange={field.onChange} />
+                      )}
+                    />
+                  </div>
+                  <div className="grid grid-cols-2 gap-4 mt-4">
+                    <Controller
+                      name={`experience.${i}.startDate`}
+                      control={control}
+                      render={({ field }) => (
+                        <DateField label="Start Date" value={field.value} onChange={field.onChange} />
+                      )}
+                    />
+                    {!isCurrentRole && (
+                      <Controller
+                        name={`experience.${i}.endDate`}
+                        control={control}
+                        render={({ field }) => (
+                          <DateField label="End Date" value={field.value} onChange={field.onChange} />
+                        )}
+                      />
+                    )}
+                  </div>
+                  <div className="mt-3">
+                    <Controller
+                      name={`experience.${i}.isCurrentRole`}
+                      control={control}
+                      render={({ field }) => (
+                        <label className="inline-flex items-center gap-2 cursor-pointer">
+                          <input
+                            type="checkbox"
+                            checked={field.value}
+                            onChange={field.onChange}
+                            className="accent-blue-600 w-4 h-4 rounded"
+                          />
+                          <span className="text-xs text-gray-500 dark:text-gray-400">I currently work here</span>
+                        </label>
+                      )}
+                    />
+                  </div>
                   <Controller
-                    name={`experience.${i}.endDate`}
+                    name={`experience.${i}.description`}
                     control={control}
                     render={({ field }) => (
-                      <DateField label="End Date" value={field.value} onChange={field.onChange} />
+                      <Field label="Description" value={field.value} onChange={field.onChange} multiline tall className="mt-4" />
                     )}
                   />
-                )}
-              </div>
-              <div className="mt-3">
-                <Controller
-                  name={`experience.${i}.isCurrentRole`}
-                  control={control}
-                  render={({ field }) => (
-                    <label className="inline-flex items-center gap-2 cursor-pointer">
-                      <input
-                        type="checkbox"
-                        checked={field.value}
-                        onChange={field.onChange}
-                        className="accent-blue-600 w-4 h-4 rounded"
-                      />
-                      <span className="text-xs text-gray-500 dark:text-gray-400">I currently work here</span>
-                    </label>
-                  )}
-                />
-              </div>
-              <Controller
-                name={`experience.${i}.description`}
-                control={control}
-                render={({ field }) => (
-                  <Field label="Description" value={field.value} onChange={field.onChange} multiline tall className="mt-4" />
-                )}
-              />
-            </EntryCard>
-          )
-        })}
-      </div>
+                </EntryCard>
+              </SortableItem>
+            )
+          })}
+        </div>
+      </SortableList>
     </div>
   )
 }

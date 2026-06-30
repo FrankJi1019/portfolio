@@ -2,6 +2,7 @@ import type { FC } from "react"
 import { useForm, useFieldArray, Controller } from "react-hook-form"
 import type { EducationResponse, EducationEntry } from "../../types/portfolio"
 import { PageHeader, EntryCard, Field, DateField, SaveNotification } from "../../components/FormControls"
+import { SortableList, SortableItem } from "../../components/SortableList"
 import { useSaveHandler } from "../../hooks/useSaveHandler"
 
 interface EducationPageProps {
@@ -22,7 +23,7 @@ const EducationPage: FC<EducationPageProps> = ({ content, onSave }) => {
     defaultValues: content,
   })
 
-  const { fields, prepend, remove } = useFieldArray({ control, name: "education" })
+  const { fields, prepend, remove, move } = useFieldArray({ control, name: "education" })
   const { handleSave, showNotification, dismissNotification } = useSaveHandler(onSave, reset)
 
   return (
@@ -35,51 +36,55 @@ const EducationPage: FC<EducationPageProps> = ({ content, onSave }) => {
         onSave={handleSubmit(handleSave)}
         isSaveDisabled={!isDirty}
       />
-      <div className="space-y-4">
-        {fields.map((field, i) => (
-          <EntryCard key={field.id} onRemove={() => remove(i)}>
-            <div className="grid grid-cols-2 gap-4">
-              <Controller
-                name={`education.${i}.institution`}
-                control={control}
-                render={({ field }) => (
-                  <Field label="Institution" value={field.value} onChange={field.onChange} />
-                )}
-              />
-              <Controller
-                name={`education.${i}.degree`}
-                control={control}
-                render={({ field }) => (
-                  <Field label="Degree" value={field.value} onChange={field.onChange} />
-                )}
-              />
-            </div>
-            <div className="grid grid-cols-2 gap-4 mt-4">
-              <Controller
-                name={`education.${i}.startDate`}
-                control={control}
-                render={({ field }) => (
-                  <DateField label="Start Date" value={field.value} onChange={field.onChange} />
-                )}
-              />
-              <Controller
-                name={`education.${i}.endDate`}
-                control={control}
-                render={({ field }) => (
-                  <DateField label="End Date" value={field.value} onChange={field.onChange} />
-                )}
-              />
-            </div>
-            <Controller
-              name={`education.${i}.description`}
-              control={control}
-              render={({ field }) => (
-                <Field label="Description" value={field.value} onChange={field.onChange} multiline tall className="mt-4" />
-              )}
-            />
-          </EntryCard>
-        ))}
-      </div>
+      <SortableList items={fields} onReorder={move}>
+        <div className="space-y-4 pl-8">
+          {fields.map((field, i) => (
+            <SortableItem key={field.id} id={field.id}>
+              <EntryCard onRemove={() => remove(i)}>
+                <div className="grid grid-cols-2 gap-4">
+                  <Controller
+                    name={`education.${i}.institution`}
+                    control={control}
+                    render={({ field }) => (
+                      <Field label="Institution" value={field.value} onChange={field.onChange} />
+                    )}
+                  />
+                  <Controller
+                    name={`education.${i}.degree`}
+                    control={control}
+                    render={({ field }) => (
+                      <Field label="Degree" value={field.value} onChange={field.onChange} />
+                    )}
+                  />
+                </div>
+                <div className="grid grid-cols-2 gap-4 mt-4">
+                  <Controller
+                    name={`education.${i}.startDate`}
+                    control={control}
+                    render={({ field }) => (
+                      <DateField label="Start Date" value={field.value} onChange={field.onChange} />
+                    )}
+                  />
+                  <Controller
+                    name={`education.${i}.endDate`}
+                    control={control}
+                    render={({ field }) => (
+                      <DateField label="End Date" value={field.value} onChange={field.onChange} />
+                    )}
+                  />
+                </div>
+                <Controller
+                  name={`education.${i}.description`}
+                  control={control}
+                  render={({ field }) => (
+                    <Field label="Description" value={field.value} onChange={field.onChange} multiline tall className="mt-4" />
+                  )}
+                />
+              </EntryCard>
+            </SortableItem>
+          ))}
+        </div>
+      </SortableList>
     </div>
   )
 }

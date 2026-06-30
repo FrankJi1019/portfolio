@@ -2,6 +2,7 @@ import type { FC } from "react"
 import { useForm, useFieldArray, Controller } from "react-hook-form"
 import type { ProjectsResponse, Project } from "../../types/portfolio"
 import { PageHeader, EntryCard, Field, TagList, SaveNotification } from "../../components/FormControls"
+import { SortableList, SortableItem } from "../../components/SortableList"
 import { useSaveHandler } from "../../hooks/useSaveHandler"
 
 interface ProjectsPageProps {
@@ -21,7 +22,7 @@ const ProjectsPage: FC<ProjectsPageProps> = ({ content, onSave }) => {
     defaultValues: content,
   })
 
-  const { fields, prepend, remove } = useFieldArray({ control, name: "projects" })
+  const { fields, prepend, remove, move } = useFieldArray({ control, name: "projects" })
   const { handleSave, showNotification, dismissNotification } = useSaveHandler(onSave, reset)
 
   return (
@@ -34,42 +35,46 @@ const ProjectsPage: FC<ProjectsPageProps> = ({ content, onSave }) => {
         onSave={handleSubmit(handleSave)}
         isSaveDisabled={!isDirty}
       />
-      <div className="space-y-4">
-        {fields.map((field, i) => (
-          <EntryCard key={field.id} onRemove={() => remove(i)}>
-            <div className="grid grid-cols-2 gap-4">
-              <Controller
-                name={`projects.${i}.title`}
-                control={control}
-                render={({ field }) => (
-                  <Field label="Title" value={field.value} onChange={field.onChange} />
-                )}
-              />
-              <Controller
-                name={`projects.${i}.link`}
-                control={control}
-                render={({ field }) => (
-                  <Field label="Link" value={field.value ?? ""} onChange={field.onChange} />
-                )}
-              />
-            </div>
-            <Controller
-              name={`projects.${i}.description`}
-              control={control}
-              render={({ field }) => (
-                <Field label="Description" value={field.value} onChange={field.onChange} multiline className="mt-4" />
-              )}
-            />
-            <Controller
-              name={`projects.${i}.tech`}
-              control={control}
-              render={({ field }) => (
-                <TagList label="Tech Stack" items={field.value} onChange={field.onChange} className="mt-4" />
-              )}
-            />
-          </EntryCard>
-        ))}
-      </div>
+      <SortableList items={fields} onReorder={move}>
+        <div className="space-y-4 pl-8">
+          {fields.map((field, i) => (
+            <SortableItem key={field.id} id={field.id}>
+              <EntryCard onRemove={() => remove(i)}>
+                <div className="grid grid-cols-2 gap-4">
+                  <Controller
+                    name={`projects.${i}.title`}
+                    control={control}
+                    render={({ field }) => (
+                      <Field label="Title" value={field.value} onChange={field.onChange} />
+                    )}
+                  />
+                  <Controller
+                    name={`projects.${i}.link`}
+                    control={control}
+                    render={({ field }) => (
+                      <Field label="Link" value={field.value ?? ""} onChange={field.onChange} />
+                    )}
+                  />
+                </div>
+                <Controller
+                  name={`projects.${i}.description`}
+                  control={control}
+                  render={({ field }) => (
+                    <Field label="Description" value={field.value} onChange={field.onChange} multiline className="mt-4" />
+                  )}
+                />
+                <Controller
+                  name={`projects.${i}.tech`}
+                  control={control}
+                  render={({ field }) => (
+                    <TagList label="Tech Stack" items={field.value} onChange={field.onChange} className="mt-4" />
+                  )}
+                />
+              </EntryCard>
+            </SortableItem>
+          ))}
+        </div>
+      </SortableList>
     </div>
   )
 }
