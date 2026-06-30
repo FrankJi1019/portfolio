@@ -1,7 +1,7 @@
 import { useCallback, useState } from "react"
 import type { UseFormReset } from "react-hook-form"
 
-export function useSaveHandler<T extends Record<string, unknown>>(
+export function useSaveHandler<T extends Record<string, any>>(
   onSave: (data: T) => Promise<void> | void,
   reset: UseFormReset<T>,
 ) {
