@@ -3,9 +3,11 @@ import type { AboutResponse } from "../../types/portfolio"
 import AboutPage from "./AboutPage"
 import PageLoader from "../../components/PageLoader"
 import { useFetchContentSection, useUpdateContentSection } from '../../api-hooks/content-section'
+import { useAuth } from "../../providers/AuthProvider"
 
 const AboutPageBuilder: FC = () => {
 
+  const { userRole } = useAuth()
   const { data, refetch } = useFetchContentSection('about')
 
   const { mutateAsync } = useUpdateContentSection()
@@ -24,7 +26,7 @@ const AboutPageBuilder: FC = () => {
     return <PageLoader />
   }
 
-  return <AboutPage content={data} onSave={handleSave} />
+  return <AboutPage content={data} onSave={handleSave} userRole={userRole} />
 }
 
 export default AboutPageBuilder

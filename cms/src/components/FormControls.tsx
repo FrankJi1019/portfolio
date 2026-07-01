@@ -63,15 +63,17 @@ export const SeoHint = () => (
   </div>
 )
 
-export const EntryCard = ({ children, onRemove }: { children: React.ReactNode; onRemove: () => void }) => (
+export const EntryCard = ({ children, onRemove, disabled }: { children: React.ReactNode; onRemove: () => void; disabled?: boolean }) => (
   <div className="relative rounded-2xl border border-gray-200/80 dark:border-gray-700/50 bg-white dark:bg-[#1a1d24] p-6 shadow-sm hover:shadow-md dark:hover:shadow-xl dark:hover:shadow-black/10 transition-all duration-200 border-l-[3px] border-l-blue-400 dark:border-l-blue-500">
-    <button
-      onClick={onRemove}
-      className="absolute top-4 right-4 w-7 h-7 flex items-center justify-center rounded-full text-gray-300 dark:text-gray-600 hover:text-white hover:bg-red-500 hover:shadow-lg hover:shadow-red-200/50 dark:hover:shadow-red-900/20 transition-all duration-150 hover:scale-110"
-      title="Remove"
-    >
-      <FontAwesomeIcon icon={faXmark} className="text-xs" />
-    </button>
+    {!disabled && (
+      <button
+        onClick={onRemove}
+        className="absolute top-4 right-4 w-7 h-7 flex items-center justify-center rounded-full text-gray-300 dark:text-gray-600 hover:text-white hover:bg-red-500 hover:shadow-lg hover:shadow-red-200/50 dark:hover:shadow-red-900/20 transition-all duration-150 hover:scale-110"
+        title="Remove"
+      >
+        <FontAwesomeIcon icon={faXmark} className="text-xs" />
+      </button>
+    )}
     {children}
   </div>
 )
@@ -97,12 +99,14 @@ interface FieldProps {
   hint?: string
   className?: string
   elevated?: boolean
+  disabled?: boolean
 }
 
-export const Field = ({ label, value, onChange, multiline, tall, hint, className = "", elevated }: FieldProps) => {
+export const Field = ({ label, value, onChange, multiline, tall, hint, className = "", elevated, disabled }: FieldProps) => {
   const bg = elevated
     ? "bg-white dark:bg-[#1a1d24] border-gray-200 dark:border-gray-700 shadow-sm"
     : "bg-gray-50/50 dark:bg-gray-800/50 border-gray-200 dark:border-gray-700"
+  const disabledStyles = "disabled:opacity-60 disabled:cursor-not-allowed"
   return (
     <label className={`block ${className}`}>
       <span className="text-[11px] font-semibold uppercase tracking-wider text-gray-400 dark:text-gray-500 mb-2 block">
@@ -111,28 +115,31 @@ export const Field = ({ label, value, onChange, multiline, tall, hint, className
       </span>
       {multiline ? (
         <textarea
-          className={`w-full border rounded-xl px-4 py-3 text-sm resize-y dark:text-gray-100 hover:border-gray-300 dark:hover:border-gray-600 focus:bg-white dark:focus:bg-gray-800 focus:outline-none focus:ring-2 focus:ring-blue-500/10 focus:border-blue-400 dark:focus:border-blue-500 focus:shadow-[inset_0_1px_4px_rgba(99,102,241,0.05)] transition-all placeholder:text-gray-300 dark:placeholder:text-gray-600 ${bg} ${tall ? "min-h-36" : "min-h-20"}`}
+          className={`w-full border rounded-xl px-4 py-3 text-sm resize-y dark:text-gray-100 hover:border-gray-300 dark:hover:border-gray-600 focus:bg-white dark:focus:bg-gray-800 focus:outline-none focus:ring-2 focus:ring-blue-500/10 focus:border-blue-400 dark:focus:border-blue-500 focus:shadow-[inset_0_1px_4px_rgba(99,102,241,0.05)] transition-all placeholder:text-gray-300 dark:placeholder:text-gray-600 ${bg} ${tall ? "min-h-36" : "min-h-20"} ${disabledStyles}`}
           value={value}
           onChange={(e) => onChange(e.target.value)}
+          disabled={disabled}
         />
       ) : (
         <input
-          className={`w-full border rounded-xl px-4 py-3 text-sm dark:text-gray-100 hover:border-gray-300 dark:hover:border-gray-600 focus:bg-white dark:focus:bg-gray-800 focus:outline-none focus:ring-2 focus:ring-blue-500/10 focus:border-blue-400 dark:focus:border-blue-500 focus:shadow-[inset_0_1px_4px_rgba(99,102,241,0.05)] transition-all placeholder:text-gray-300 dark:placeholder:text-gray-600 ${bg}`}
+          className={`w-full border rounded-xl px-4 py-3 text-sm dark:text-gray-100 hover:border-gray-300 dark:hover:border-gray-600 focus:bg-white dark:focus:bg-gray-800 focus:outline-none focus:ring-2 focus:ring-blue-500/10 focus:border-blue-400 dark:focus:border-blue-500 focus:shadow-[inset_0_1px_4px_rgba(99,102,241,0.05)] transition-all placeholder:text-gray-300 dark:placeholder:text-gray-600 ${bg} ${disabledStyles}`}
           value={value}
           onChange={(e) => onChange(e.target.value)}
+          disabled={disabled}
         />
       )}
     </label>
   )
 }
 
-export const Select = ({ label, value, options, onChange }: { label: string; value: string; options: { value: string; label: string }[]; onChange: (v: string) => void }) => (
+export const Select = ({ label, value, options, onChange, disabled }: { label: string; value: string; options: { value: string; label: string }[]; onChange: (v: string) => void; disabled?: boolean }) => (
   <label className="block">
     <span className="text-[11px] font-semibold uppercase tracking-wider text-gray-400 dark:text-gray-500 mb-2 block">{label}</span>
     <select
       value={value}
       onChange={(e) => onChange(e.target.value)}
-      className="w-full border border-gray-200 dark:border-gray-700 rounded-xl px-4 py-3 text-sm bg-gray-50/50 dark:bg-gray-800/50 dark:text-gray-100 hover:border-gray-300 dark:hover:border-gray-600 focus:bg-white dark:focus:bg-gray-800 focus:outline-none focus:ring-2 focus:ring-blue-500/10 focus:border-blue-400 dark:focus:border-blue-500 transition-all"
+      disabled={disabled}
+      className="w-full border border-gray-200 dark:border-gray-700 rounded-xl px-4 py-3 text-sm bg-gray-50/50 dark:bg-gray-800/50 dark:text-gray-100 hover:border-gray-300 dark:hover:border-gray-600 focus:bg-white dark:focus:bg-gray-800 focus:outline-none focus:ring-2 focus:ring-blue-500/10 focus:border-blue-400 dark:focus:border-blue-500 transition-all disabled:opacity-60 disabled:cursor-not-allowed"
     >
       {options.map((opt) => (
         <option key={opt.value} value={opt.value}>{opt.label}</option>
@@ -141,7 +148,7 @@ export const Select = ({ label, value, options, onChange }: { label: string; val
   </label>
 )
 
-export const DateField = ({ label, value, onChange, className = "" }: { label: string; value: string; onChange: (v: string) => void; className?: string }) => {
+export const DateField = ({ label, value, onChange, className = "", disabled }: { label: string; value: string; onChange: (v: string) => void; className?: string; disabled?: boolean }) => {
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     let raw = e.target.value.replace(/[^\d]/g, "")
     if (raw.length > 6) raw = raw.slice(0, 6)
@@ -161,13 +168,14 @@ export const DateField = ({ label, value, onChange, className = "" }: { label: s
         value={value}
         onChange={handleChange}
         maxLength={7}
-        className="w-full border border-gray-200 dark:border-gray-700 rounded-xl px-4 py-3 text-sm bg-gray-50/50 dark:bg-gray-800/50 dark:text-gray-100 hover:border-gray-300 dark:hover:border-gray-600 focus:bg-white dark:focus:bg-gray-800 focus:outline-none focus:ring-2 focus:ring-blue-500/10 focus:border-blue-400 dark:focus:border-blue-500 focus:shadow-[inset_0_1px_4px_rgba(99,102,241,0.05)] transition-all placeholder:text-gray-300 dark:placeholder:text-gray-600"
+        disabled={disabled}
+        className="w-full border border-gray-200 dark:border-gray-700 rounded-xl px-4 py-3 text-sm bg-gray-50/50 dark:bg-gray-800/50 dark:text-gray-100 hover:border-gray-300 dark:hover:border-gray-600 focus:bg-white dark:focus:bg-gray-800 focus:outline-none focus:ring-2 focus:ring-blue-500/10 focus:border-blue-400 dark:focus:border-blue-500 focus:shadow-[inset_0_1px_4px_rgba(99,102,241,0.05)] transition-all placeholder:text-gray-300 dark:placeholder:text-gray-600 disabled:opacity-60 disabled:cursor-not-allowed"
       />
     </label>
   )
 }
 
-export const TagList = ({ label, items, onChange, className = "" }: { label: string; items: string[]; onChange: (items: string[]) => void; className?: string }) => {
+export const TagList = ({ label, items, onChange, className = "", disabled }: { label: string; items: string[]; onChange: (items: string[]) => void; className?: string; disabled?: boolean }) => {
   const [input, setInput] = useState("")
 
   const handleAdd = () => {
@@ -187,30 +195,34 @@ export const TagList = ({ label, items, onChange, className = "" }: { label: str
   return (
     <div className={className}>
       <span className="text-[11px] font-semibold uppercase tracking-wider text-gray-400 dark:text-gray-500 mb-2 block">{label}</span>
-      <div className="flex gap-2 mb-3">
-        <input
-          className="flex-1 border border-gray-200 dark:border-gray-700 rounded-xl px-4 py-2.5 text-sm bg-gray-50/50 dark:bg-gray-800/50 dark:text-gray-100 hover:border-gray-300 dark:hover:border-gray-600 focus:bg-white dark:focus:bg-gray-800 focus:outline-none focus:ring-2 focus:ring-blue-500/10 focus:border-blue-400 dark:focus:border-blue-500 transition-all placeholder:text-gray-300 dark:placeholder:text-gray-600"
-          placeholder="Type and press Enter..."
-          value={input}
-          onChange={(e) => setInput(e.target.value)}
-          onKeyDown={handleKeyDown}
-        />
-        <button
-          onClick={handleAdd}
-          disabled={!input.trim()}
-          className="px-4 py-2.5 text-xs font-semibold bg-gradient-to-r from-blue-500 to-blue-500 text-white rounded-xl hover:from-blue-600 hover:to-blue-600 disabled:opacity-30 disabled:cursor-not-allowed transition-all shadow-sm hover:shadow-md shadow-blue-200/30 dark:shadow-blue-900/20 hover:scale-[1.02] active:scale-[0.98]"
-        >
-          Add
-        </button>
-      </div>
+      {!disabled && (
+        <div className="flex gap-2 mb-3">
+          <input
+            className="flex-1 border border-gray-200 dark:border-gray-700 rounded-xl px-4 py-2.5 text-sm bg-gray-50/50 dark:bg-gray-800/50 dark:text-gray-100 hover:border-gray-300 dark:hover:border-gray-600 focus:bg-white dark:focus:bg-gray-800 focus:outline-none focus:ring-2 focus:ring-blue-500/10 focus:border-blue-400 dark:focus:border-blue-500 transition-all placeholder:text-gray-300 dark:placeholder:text-gray-600"
+            placeholder="Type and press Enter..."
+            value={input}
+            onChange={(e) => setInput(e.target.value)}
+            onKeyDown={handleKeyDown}
+          />
+          <button
+            onClick={handleAdd}
+            disabled={!input.trim()}
+            className="px-4 py-2.5 text-xs font-semibold bg-gradient-to-r from-blue-500 to-blue-500 text-white rounded-xl hover:from-blue-600 hover:to-blue-600 disabled:opacity-30 disabled:cursor-not-allowed transition-all shadow-sm hover:shadow-md shadow-blue-200/30 dark:shadow-blue-900/20 hover:scale-[1.02] active:scale-[0.98]"
+          >
+            Add
+          </button>
+        </div>
+      )}
       {items.length > 0 && (
         <div className="flex flex-wrap gap-2">
           {items.map((item, i) => (
             <span key={i} className="inline-flex items-center gap-1.5 bg-white dark:bg-gray-800 text-blue-700 dark:text-blue-300 text-xs font-medium pl-3 pr-2 py-1.5 rounded-full border border-blue-200/80 dark:border-blue-700/50 shadow-sm hover:shadow-md hover:scale-[1.03] transition-all duration-150 cursor-default">
               {item}
-              <button onClick={() => onChange(items.filter((_, j) => j !== i))} className="w-4 h-4 flex items-center justify-center rounded-full hover:bg-red-500 hover:text-white text-blue-300 dark:text-blue-600 transition-all">
-                <FontAwesomeIcon icon={faXmark} className="text-[8px]" />
-              </button>
+              {!disabled && (
+                <button onClick={() => onChange(items.filter((_, j) => j !== i))} className="w-4 h-4 flex items-center justify-center rounded-full hover:bg-red-500 hover:text-white text-blue-300 dark:text-blue-600 transition-all">
+                  <FontAwesomeIcon icon={faXmark} className="text-[8px]" />
+                </button>
+              )}
             </span>
           ))}
         </div>

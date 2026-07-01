@@ -4,10 +4,12 @@ import type { ExperienceResponse, Role } from "../../types/portfolio"
 import { PageHeader, EntryCard, Field, DateField, SaveNotification } from "../../components/FormControls"
 import { SortableList, SortableItem } from "../../components/SortableList"
 import { useSaveHandler } from "../../hooks/useSaveHandler"
+import type { UserRole } from "../../providers/AuthProvider"
 
 interface ExperiencePageProps {
   content: ExperienceResponse
   onSave: (data: ExperienceResponse) => Promise<void> | void
+  userRole: UserRole
 }
 
 const emptyRole: Role = {
@@ -19,13 +21,15 @@ const emptyRole: Role = {
   description: "",
 }
 
-const ExperiencePage: FC<ExperiencePageProps> = ({ content, onSave }) => {
+const ExperiencePage: FC<ExperiencePageProps> = ({ content, onSave, userRole }) => {
   const { control, handleSubmit, reset, watch, formState: { isDirty } } = useForm<ExperienceResponse>({
     defaultValues: content,
   })
 
   const { fields, prepend, remove, move } = useFieldArray({ control, name: "experience" })
   const { handleSave, showNotification, dismissNotification } = useSaveHandler(onSave, reset)
+
+  const isReadOnly = userRole !== 'AUTHENTICATED'
 
   return (
     <div className="max-w-3xl">
@@ -36,27 +40,28 @@ const ExperiencePage: FC<ExperiencePageProps> = ({ content, onSave }) => {
         onAdd={() => prepend(emptyRole)}
         onSave={handleSubmit(handleSave)}
         isSaveDisabled={!isDirty}
+        userRole={userRole}
       />
-      <SortableList items={fields} onReorder={move}>
+      <SortableList items={fields} onReorder={move} disabled={isReadOnly}>
         <div className="space-y-4 pl-8">
           {fields.map((field, i) => {
             const isCurrentRole = watch(`experience.${i}.isCurrentRole`)
             return (
-              <SortableItem key={field.id} id={field.id}>
-                <EntryCard onRemove={() => remove(i)}>
+              <SortableItem key={field.id} id={field.id} disabled={isReadOnly}>
+                <EntryCard onRemove={() => remove(i)} disabled={isReadOnly}>
                   <div className="grid grid-cols-2 gap-4">
                     <Controller
                       name={`experience.${i}.title`}
                       control={control}
                       render={({ field }) => (
-                        <Field label="Job Title" value={field.value} onChange={field.onChange} />
+                        <Field label="Job Title" value={field.value} onChange={field.onChange} disabled={isReadOnly} />
                       )}
                     />
                     <Controller
                       name={`experience.${i}.company`}
                       control={control}
                       render={({ field }) => (
-                        <Field label="Company" value={field.value} onChange={field.onChange} />
+                        <Field label="Company" value={field.value} onChange={field.onChange} disabled={isReadOnly} />
                       )}
                     />
                   </div>
@@ -65,7 +70,7 @@ const ExperiencePage: FC<ExperiencePageProps> = ({ content, onSave }) => {
                       name={`experience.${i}.startDate`}
                       control={control}
                       render={({ field }) => (
-                        <DateField label="Start Date" value={field.value} onChange={field.onChange} />
+                        <DateField label="Start Date" value={field.value} onChange={field.onChange} disabled={isReadOnly} />
                       )}
                     />
                     {!isCurrentRole && (
@@ -73,7 +78,7 @@ const ExperiencePage: FC<ExperiencePageProps> = ({ content, onSave }) => {
                         name={`experience.${i}.endDate`}
                         control={control}
                         render={({ field }) => (
-                          <DateField label="End Date" value={field.value} onChange={field.onChange} />
+                          <DateField label="End Date" value={field.value} onChange={field.onChange} disabled={isReadOnly} />
                         )}
                       />
                     )}
@@ -88,7 +93,8 @@ const ExperiencePage: FC<ExperiencePageProps> = ({ content, onSave }) => {
                             type="checkbox"
                             checked={field.value}
                             onChange={field.onChange}
-                            className="accent-blue-600 w-4 h-4 rounded"
+                            disabled={isReadOnly}
+                            className="accent-blue-600 w-4 h-4 rounded disabled:opacity-60 disabled:cursor-not-allowed"
                           />
                           <span className="text-xs text-gray-500 dark:text-gray-400">I currently work here</span>
                         </label>
@@ -99,7 +105,7 @@ const ExperiencePage: FC<ExperiencePageProps> = ({ content, onSave }) => {
                     name={`experience.${i}.description`}
                     control={control}
                     render={({ field }) => (
-                      <Field label="Description" value={field.value} onChange={field.onChange} multiline tall className="mt-4" />
+                      <Field label="Description" value={field.value} onChange={field.onChange} multiline tall className="mt-4" disabled={isReadOnly} />
                     )}
                   />
                 </EntryCard>

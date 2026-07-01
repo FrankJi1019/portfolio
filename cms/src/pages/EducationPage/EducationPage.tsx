@@ -4,10 +4,12 @@ import type { EducationResponse, EducationEntry } from "../../types/portfolio"
 import { PageHeader, EntryCard, Field, DateField, SaveNotification } from "../../components/FormControls"
 import { SortableList, SortableItem } from "../../components/SortableList"
 import { useSaveHandler } from "../../hooks/useSaveHandler"
+import type { UserRole } from "../../providers/AuthProvider"
 
 interface EducationPageProps {
   content: EducationResponse
   onSave: (data: EducationResponse) => Promise<void> | void
+  userRole: UserRole
 }
 
 const emptyEntry: EducationEntry = {
@@ -18,13 +20,15 @@ const emptyEntry: EducationEntry = {
   description: "",
 }
 
-const EducationPage: FC<EducationPageProps> = ({ content, onSave }) => {
+const EducationPage: FC<EducationPageProps> = ({ content, onSave, userRole }) => {
   const { control, handleSubmit, reset, formState: { isDirty } } = useForm<EducationResponse>({
     defaultValues: content,
   })
 
   const { fields, prepend, remove, move } = useFieldArray({ control, name: "education" })
   const { handleSave, showNotification, dismissNotification } = useSaveHandler(onSave, reset)
+
+  const isReadOnly = userRole !== 'AUTHENTICATED'
 
   return (
     <div className="max-w-3xl">
@@ -35,25 +39,26 @@ const EducationPage: FC<EducationPageProps> = ({ content, onSave }) => {
         onAdd={() => prepend(emptyEntry)}
         onSave={handleSubmit(handleSave)}
         isSaveDisabled={!isDirty}
+        userRole={userRole}
       />
-      <SortableList items={fields} onReorder={move}>
+      <SortableList items={fields} onReorder={move} disabled={isReadOnly}>
         <div className="space-y-4 pl-8">
           {fields.map((field, i) => (
-            <SortableItem key={field.id} id={field.id}>
-              <EntryCard onRemove={() => remove(i)}>
+            <SortableItem key={field.id} id={field.id} disabled={isReadOnly}>
+              <EntryCard onRemove={() => remove(i)} disabled={isReadOnly}>
                 <div className="grid grid-cols-2 gap-4">
                   <Controller
                     name={`education.${i}.institution`}
                     control={control}
                     render={({ field }) => (
-                      <Field label="Institution" value={field.value} onChange={field.onChange} />
+                      <Field label="Institution" value={field.value} onChange={field.onChange} disabled={isReadOnly} />
                     )}
                   />
                   <Controller
                     name={`education.${i}.degree`}
                     control={control}
                     render={({ field }) => (
-                      <Field label="Degree" value={field.value} onChange={field.onChange} />
+                      <Field label="Degree" value={field.value} onChange={field.onChange} disabled={isReadOnly} />
                     )}
                   />
                 </div>
@@ -62,14 +67,14 @@ const EducationPage: FC<EducationPageProps> = ({ content, onSave }) => {
                     name={`education.${i}.startDate`}
                     control={control}
                     render={({ field }) => (
-                      <DateField label="Start Date" value={field.value} onChange={field.onChange} />
+                      <DateField label="Start Date" value={field.value} onChange={field.onChange} disabled={isReadOnly} />
                     )}
                   />
                   <Controller
                     name={`education.${i}.endDate`}
                     control={control}
                     render={({ field }) => (
-                      <DateField label="End Date" value={field.value} onChange={field.onChange} />
+                      <DateField label="End Date" value={field.value} onChange={field.onChange} disabled={isReadOnly} />
                     )}
                   />
                 </div>
@@ -77,7 +82,7 @@ const EducationPage: FC<EducationPageProps> = ({ content, onSave }) => {
                   name={`education.${i}.description`}
                   control={control}
                   render={({ field }) => (
-                    <Field label="Description" value={field.value} onChange={field.onChange} multiline tall className="mt-4" />
+                    <Field label="Description" value={field.value} onChange={field.onChange} multiline tall className="mt-4" disabled={isReadOnly} />
                   )}
                 />
               </EntryCard>

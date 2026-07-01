@@ -3,8 +3,10 @@ import type { ExperienceResponse } from "../../types/portfolio"
 import ExperiencePage from "./ExperiencePage"
 import PageLoader from "../../components/PageLoader"
 import { useFetchContentSection, useUpdateContentSection } from "../../api-hooks/content-section"
+import { useAuth } from "../../providers/AuthProvider"
 
 const ExperiencePageBuilder: FC = () => {
+  const { userRole } = useAuth()
   const { data, refetch } = useFetchContentSection("experience")
 
   const { mutateAsync } = useUpdateContentSection()
@@ -23,7 +25,7 @@ const ExperiencePageBuilder: FC = () => {
     return <PageLoader />
   }
 
-  return <ExperiencePage content={data} onSave={handleSave} />
+  return <ExperiencePage content={data} onSave={handleSave} userRole={userRole} />
 }
 
 export default ExperiencePageBuilder

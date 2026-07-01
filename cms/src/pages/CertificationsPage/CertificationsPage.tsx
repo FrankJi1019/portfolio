@@ -4,10 +4,12 @@ import type { CertificationsResponse, Certification } from "../../types/portfoli
 import { PageHeader, EntryCard, Field, DateField, SaveNotification } from "../../components/FormControls"
 import { SortableList, SortableItem } from "../../components/SortableList"
 import { useSaveHandler } from "../../hooks/useSaveHandler"
+import type { UserRole } from "../../providers/AuthProvider"
 
 interface CertificationsPageProps {
   content: CertificationsResponse
   onSave: (data: CertificationsResponse) => Promise<void> | void
+  userRole: UserRole
 }
 
 const emptyCertification: Certification = {
@@ -18,13 +20,15 @@ const emptyCertification: Certification = {
   credlyUrl: "",
 }
 
-const CertificationsPage: FC<CertificationsPageProps> = ({ content, onSave }) => {
+const CertificationsPage: FC<CertificationsPageProps> = ({ content, onSave, userRole }) => {
   const { control, handleSubmit, reset, formState: { isDirty } } = useForm<CertificationsResponse>({
     defaultValues: content,
   })
 
   const { fields, prepend, remove, move } = useFieldArray({ control, name: "certifications" })
   const { handleSave, showNotification, dismissNotification } = useSaveHandler(onSave, reset)
+
+  const isReadOnly = userRole !== 'AUTHENTICATED'
 
   return (
     <div className="max-w-3xl">
@@ -35,25 +39,26 @@ const CertificationsPage: FC<CertificationsPageProps> = ({ content, onSave }) =>
         onAdd={() => prepend(emptyCertification)}
         onSave={handleSubmit(handleSave)}
         isSaveDisabled={!isDirty}
+        userRole={userRole}
       />
-      <SortableList items={fields} onReorder={move}>
+      <SortableList items={fields} onReorder={move} disabled={isReadOnly}>
         <div className="space-y-4 pl-8">
           {fields.map((field, i) => (
-            <SortableItem key={field.id} id={field.id}>
-              <EntryCard onRemove={() => remove(i)}>
+            <SortableItem key={field.id} id={field.id} disabled={isReadOnly}>
+              <EntryCard onRemove={() => remove(i)} disabled={isReadOnly}>
                 <div className="grid grid-cols-2 gap-4">
                   <Controller
                     name={`certifications.${i}.name`}
                     control={control}
                     render={({ field }) => (
-                      <Field label="Name" value={field.value} onChange={field.onChange} />
+                      <Field label="Name" value={field.value} onChange={field.onChange} disabled={isReadOnly} />
                     )}
                   />
                   <Controller
                     name={`certifications.${i}.issuer`}
                     control={control}
                     render={({ field }) => (
-                      <Field label="Issuer" value={field.value} onChange={field.onChange} />
+                      <Field label="Issuer" value={field.value} onChange={field.onChange} disabled={isReadOnly} />
                     )}
                   />
                 </div>
@@ -62,14 +67,14 @@ const CertificationsPage: FC<CertificationsPageProps> = ({ content, onSave }) =>
                     name={`certifications.${i}.issuedDate`}
                     control={control}
                     render={({ field }) => (
-                      <DateField label="Issued" value={field.value} onChange={field.onChange} />
+                      <DateField label="Issued" value={field.value} onChange={field.onChange} disabled={isReadOnly} />
                     )}
                   />
                   <Controller
                     name={`certifications.${i}.expiresDate`}
                     control={control}
                     render={({ field }) => (
-                      <DateField label="Expires" value={field.value} onChange={field.onChange} />
+                      <DateField label="Expires" value={field.value} onChange={field.onChange} disabled={isReadOnly} />
                     )}
                   />
                 </div>
@@ -77,7 +82,7 @@ const CertificationsPage: FC<CertificationsPageProps> = ({ content, onSave }) =>
                   name={`certifications.${i}.credlyUrl`}
                   control={control}
                   render={({ field }) => (
-                    <Field label="Credly URL" value={field.value ?? ""} onChange={field.onChange} className="mt-4" />
+                    <Field label="Credly URL" value={field.value ?? ""} onChange={field.onChange} className="mt-4" disabled={isReadOnly} />
                   )}
                 />
               </EntryCard>

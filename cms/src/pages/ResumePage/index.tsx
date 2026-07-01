@@ -3,6 +3,7 @@ import type { ResumeData } from "../../types/portfolio"
 import ResumePage from "./ResumePage"
 import PageLoader from "../../components/PageLoader"
 import { useFetchResumes, useSyncResume } from "../../api-hooks/resume"
+import { useAuth } from "../../providers/AuthProvider"
 
 const MOCK_CONTENT: ResumeData = {
   files: [
@@ -23,6 +24,7 @@ const MOCK_CONTENT: ResumeData = {
 }
 
 const ResumePageBuilder: FC = () => {
+  const { userRole } = useAuth()
   const { data } = useFetchResumes()
   const { mutateAsync } = useSyncResume()
 
@@ -36,7 +38,7 @@ const ResumePageBuilder: FC = () => {
     return <PageLoader />
   }
 
-  return <ResumePage content={MOCK_CONTENT} onSync={handleSync} />
+  return <ResumePage content={MOCK_CONTENT} onSync={handleSync} userRole={userRole} />
 }
 
 export default ResumePageBuilder

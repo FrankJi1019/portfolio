@@ -16,12 +16,15 @@ const navItems: { path: string; label: string; icon: IconDefinition }[] = [
   { ...Routes.CERTIFICATIONS, icon: faCertificate },
   { ...Routes.CONTACT, icon: faAddressBook },
   { ...Routes.SEO, icon: faMagnifyingGlass },
+]
+
+const authenticatedNavItems: { path: string; label: string; icon: IconDefinition }[] = [
   { ...Routes.RESUME, icon: faFileArrowUp },
 ]
 
 const Sidebar = () => {
   const { isDark, toggle } = useTheme()
-  const { logout } = useAuth()
+  const { userRole, logout } = useAuth()
 
   return (
     <aside className="w-64 border-r border-gray-100 dark:border-gray-800 bg-white dark:bg-[#13151a] py-6 px-5 flex flex-col shrink-0">
@@ -47,6 +50,19 @@ const Sidebar = () => {
       {/* Nav */}
       <nav className="flex-1 flex flex-col gap-0.5">
         {navItems.map((item) => (
+          <NavLink
+            key={item.path}
+            to={item.path}
+            end
+            className={({ isActive }) =>
+              `group flex items-center gap-3 px-3 py-2.5 rounded-xl text-[13px] font-medium transition-all duration-150 ${isActive ? "bg-blue-50 dark:bg-blue-950/40 text-blue-700 dark:text-blue-300 shadow-sm shadow-blue-100/50 dark:shadow-none" : "text-gray-500 dark:text-gray-400 hover:text-gray-800 dark:hover:text-gray-200 hover:bg-gray-50 dark:hover:bg-white/5"}`
+            }
+          >
+            <FontAwesomeIcon icon={item.icon} className="w-3.5 text-[11px] opacity-60 group-hover:opacity-100 transition-opacity" />
+            {item.label}
+          </NavLink>
+        ))}
+        {userRole === 'AUTHENTICATED' && authenticatedNavItems.map((item) => (
           <NavLink
             key={item.path}
             to={item.path}

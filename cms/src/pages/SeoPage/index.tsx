@@ -3,8 +3,10 @@ import type { MetaData } from "../../types/portfolio"
 import SeoPage from "./SeoPage"
 import PageLoader from "../../components/PageLoader"
 import { useFetchContentSection, useUpdateContentSection } from "../../api-hooks/content-section"
+import { useAuth } from "../../providers/AuthProvider"
 
 const SeoPageBuilder: FC = () => {
+  const { userRole } = useAuth()
   const { data, refetch } = useFetchContentSection("seo")
 
   const { mutateAsync } = useUpdateContentSection()
@@ -23,7 +25,7 @@ const SeoPageBuilder: FC = () => {
     return <PageLoader />
   }
 
-  return <SeoPage content={data} onSave={handleSave} />
+  return <SeoPage content={data} onSave={handleSave} userRole={userRole} />
 }
 
 export default SeoPageBuilder

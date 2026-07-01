@@ -3,8 +3,10 @@ import type { ContactResponse } from "../../types/portfolio"
 import ContactPage from "./ContactPage"
 import PageLoader from "../../components/PageLoader"
 import { useFetchContentSection, useUpdateContentSection } from "../../api-hooks/content-section"
+import { useAuth } from "../../providers/AuthProvider"
 
 const ContactPageBuilder: FC = () => {
+  const { userRole } = useAuth()
   const { data, refetch } = useFetchContentSection("contact")
 
   const { mutateAsync } = useUpdateContentSection()
@@ -23,7 +25,7 @@ const ContactPageBuilder: FC = () => {
     return <PageLoader />
   }
 
-  return <ContactPage content={data} onSave={handleSave} />
+  return <ContactPage content={data} onSave={handleSave} userRole={userRole} />
 }
 
 export default ContactPageBuilder

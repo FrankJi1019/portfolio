@@ -3,8 +3,10 @@ import type { ProjectsResponse } from "../../types/portfolio"
 import ProjectsPage from "./ProjectsPage"
 import PageLoader from "../../components/PageLoader"
 import { useFetchContentSection, useUpdateContentSection } from "../../api-hooks/content-section"
+import { useAuth } from "../../providers/AuthProvider"
 
 const ProjectsPageBuilder: FC = () => {
+  const { userRole } = useAuth()
   const { data, refetch } = useFetchContentSection("projects")
 
   const { mutateAsync } = useUpdateContentSection()
@@ -23,7 +25,7 @@ const ProjectsPageBuilder: FC = () => {
     return <PageLoader />
   }
 
-  return <ProjectsPage content={data} onSave={handleSave} />
+  return <ProjectsPage content={data} onSave={handleSave} userRole={userRole} />
 }
 
 export default ProjectsPageBuilder

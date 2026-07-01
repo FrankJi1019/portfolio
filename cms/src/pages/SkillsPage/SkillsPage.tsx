@@ -4,10 +4,12 @@ import type { SkillsResponse, SkillCategory } from "../../types/portfolio"
 import { PageHeader, EntryCard, Field, TagList, SaveNotification } from "../../components/FormControls"
 import { SortableList, SortableItem } from "../../components/SortableList"
 import { useSaveHandler } from "../../hooks/useSaveHandler"
+import type { UserRole } from "../../providers/AuthProvider"
 
 interface SkillsPageProps {
   content: SkillsResponse
   onSave: (data: SkillsResponse) => Promise<void> | void
+  userRole: UserRole
 }
 
 const emptyCategory: SkillCategory = {
@@ -15,13 +17,15 @@ const emptyCategory: SkillCategory = {
   items: [],
 }
 
-const SkillsPage: FC<SkillsPageProps> = ({ content, onSave }) => {
+const SkillsPage: FC<SkillsPageProps> = ({ content, onSave, userRole }) => {
   const { control, handleSubmit, reset, formState: { isDirty } } = useForm<SkillsResponse>({
     defaultValues: content,
   })
 
   const { fields, prepend, remove, move } = useFieldArray({ control, name: "skills" })
   const { handleSave, showNotification, dismissNotification } = useSaveHandler(onSave, reset)
+
+  const isReadOnly = userRole !== 'AUTHENTICATED'
 
   return (
     <div className="max-w-3xl">
@@ -32,24 +36,25 @@ const SkillsPage: FC<SkillsPageProps> = ({ content, onSave }) => {
         onAdd={() => prepend(emptyCategory)}
         onSave={handleSubmit(handleSave)}
         isSaveDisabled={!isDirty}
+        userRole={userRole}
       />
-      <SortableList items={fields} onReorder={move}>
+      <SortableList items={fields} onReorder={move} disabled={isReadOnly}>
         <div className="space-y-4 pl-8">
           {fields.map((field, i) => (
-            <SortableItem key={field.id} id={field.id}>
-              <EntryCard onRemove={() => remove(i)}>
+            <SortableItem key={field.id} id={field.id} disabled={isReadOnly}>
+              <EntryCard onRemove={() => remove(i)} disabled={isReadOnly}>
                 <Controller
                   name={`skills.${i}.label`}
                   control={control}
                   render={({ field }) => (
-                    <Field label="Category" value={field.value} onChange={field.onChange} />
+                    <Field label="Category" value={field.value} onChange={field.onChange} disabled={isReadOnly} />
                   )}
                 />
                 <Controller
                   name={`skills.${i}.items`}
                   control={control}
                   render={({ field }) => (
-                    <TagList label="Skills" items={field.value} onChange={field.onChange} className="mt-4" />
+                    <TagList label="Skills" items={field.value} onChange={field.onChange} className="mt-4" disabled={isReadOnly} />
                   )}
                 />
               </EntryCard>
