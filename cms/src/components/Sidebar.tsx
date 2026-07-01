@@ -1,8 +1,9 @@
 import { NavLink } from "react-router-dom"
 import { Routes } from "../routes/routes"
 import { useTheme } from "../providers/ThemeProvider"
+import { useAuth } from "../providers/AuthProvider"
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome"
-import { faStar, faBriefcase, faGraduationCap, faCode, faCubes, faCertificate, faAddressBook, faMagnifyingGlass, faFileArrowUp, faFeather, faCircleHalfStroke } from "@fortawesome/free-solid-svg-icons"
+import { faStar, faBriefcase, faGraduationCap, faCode, faCubes, faCertificate, faAddressBook, faMagnifyingGlass, faFileArrowUp, faFeather, faCircleHalfStroke, faRightFromBracket } from "@fortawesome/free-solid-svg-icons"
 import type { IconDefinition } from "@fortawesome/fontawesome-svg-core"
 
 const navItems: { path: string; label: string; icon: IconDefinition }[] = [
@@ -20,6 +21,7 @@ const navItems: { path: string; label: string; icon: IconDefinition }[] = [
 
 const Sidebar = () => {
   const { isDark, toggle } = useTheme()
+  const { logout } = useAuth()
 
   return (
     <aside className="w-64 border-r border-gray-100 dark:border-gray-800 bg-white dark:bg-[#13151a] py-6 px-5 flex flex-col shrink-0">
@@ -66,6 +68,15 @@ const Sidebar = () => {
       >
         <FontAwesomeIcon icon={faCircleHalfStroke} className="w-3.5 text-[11px] opacity-60" />
         {isDark ? "Light mode" : "Dark mode"}
+      </button>
+
+      {/* Logout */}
+      <button
+        onClick={logout}
+        className="mt-1 mx-3 flex items-center gap-2.5 px-3 py-2.5 rounded-xl text-[13px] text-gray-500 dark:text-gray-400 hover:text-red-600 dark:hover:text-red-400 hover:bg-red-50 dark:hover:bg-red-950/30 transition-all"
+      >
+        <FontAwesomeIcon icon={faRightFromBracket} className="w-3.5 text-[11px] opacity-60" />
+        Log out
       </button>
     </aside>
   )

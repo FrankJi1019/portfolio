@@ -1,7 +1,8 @@
 import { useMutation, useQuery } from "@tanstack/react-query"
-import apiClient from './axios'
+import { useHttpClient } from './axios'
 
 export const useFetchResumes = () => {
+    const apiClient = useHttpClient()
     const query = useQuery({
         queryKey: ["section-content-resume"],
         queryFn: async () => {
@@ -13,6 +14,7 @@ export const useFetchResumes = () => {
 }
 
 export const useSyncResume = () => {
+    const apiClient = useHttpClient()
     const mutation = useMutation({
         mutationFn: async (fileId: string) => {
             const { data } = await apiClient.put("resume/sync", {fileId})

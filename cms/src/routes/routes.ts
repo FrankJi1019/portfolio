@@ -1,4 +1,5 @@
 export const Routes = {
+  LOGIN: { path: "/login", label: "Login" },
   HERO: { path: "/", label: "Hero" },
   ABOUT: { path: "/about", label: "About" },
   EXPERIENCE: { path: "/experience", label: "Experience" },

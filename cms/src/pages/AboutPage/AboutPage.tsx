@@ -3,13 +3,15 @@ import { useForm } from "react-hook-form"
 import type { AboutResponse } from "../../types/portfolio"
 import { PageHeader, SaveNotification } from "../../components/FormControls"
 import { useSaveHandler } from "../../hooks/useSaveHandler"
+import {type UserRole} from "../../providers/AuthProvider"
 
 interface AboutPageProps {
   content: AboutResponse
+  userRole: UserRole
   onSave: (data: AboutResponse) => Promise<void> | void
 }
 
-const AboutPage: FC<AboutPageProps> = ({ content, onSave }) => {
+const AboutPage: FC<AboutPageProps> = ({ content, userRole, onSave }) => {
   const { register, handleSubmit, reset, formState: { isDirty } } = useForm<AboutResponse>({
     defaultValues: content,
   })
@@ -25,6 +27,7 @@ const AboutPage: FC<AboutPageProps> = ({ content, onSave }) => {
         onRevert={() => reset(content)}
         onSave={handleSubmit(handleSave)}
         isSaveDisabled={!isDirty}
+        userRole={userRole}
       />
       <label className="flex flex-col flex-1 min-h-0">
         <span className="text-[11px] font-semibold uppercase tracking-wider text-gray-400 dark:text-gray-500 mb-2 block">Bio</span>

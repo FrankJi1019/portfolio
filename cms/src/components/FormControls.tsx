@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react"
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome"
 import { faXmark, faPlus, faCircleQuestion, faFloppyDisk, faRotateLeft, faCheck } from "@fortawesome/free-solid-svg-icons"
+import type { UserRole } from "../providers/AuthProvider";
 
 export const SaveNotification = ({ isVisible, onDismiss }: { isVisible: boolean; onDismiss: () => void }) => {
   useEffect(() => {
@@ -25,11 +26,11 @@ export const SaveNotification = ({ isVisible, onDismiss }: { isVisible: boolean;
   )
 }
 
-export const PageHeader = ({ title, description, onAdd, onRevert, onSave, isSaveDisabled }: { title: string; description?: string; onAdd?: () => void; onRevert?: () => void; onSave?: () => void; isSaveDisabled?: boolean }) => (
+export const PageHeader = ({ title, description, onAdd, onRevert, onSave, isSaveDisabled, userRole }: { title: string; description?: string; onAdd?: () => void; onRevert?: () => void; onSave?: () => void; isSaveDisabled?: boolean, userRole: UserRole }) => (
   <div className="mb-10">
     <div className="flex items-center justify-between">
       <h1 className="text-[26px] font-extrabold tracking-tight text-gray-900 dark:text-white">{title}</h1>
-      <div className="flex items-center gap-2">
+      {userRole === 'AUTHENTICATED' && <div className="flex items-center gap-2">
         {onAdd && (
           <button onClick={onAdd} className="inline-flex items-center gap-1.5 text-xs font-semibold text-gray-600 dark:text-gray-300 bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 hover:bg-gray-50 dark:hover:bg-gray-700 px-4 py-2.5 rounded-full transition-all hover:scale-[1.02] active:scale-[0.98]">
             <FontAwesomeIcon icon={faPlus} className="text-[10px]" />
@@ -48,7 +49,7 @@ export const PageHeader = ({ title, description, onAdd, onRevert, onSave, isSave
             Save
           </button>
         )}
-      </div>
+      </div>}
     </div>
     {description && <p className="text-[13px] text-gray-400 dark:text-gray-500 mt-1.5">{description}</p>}
     <div className="mt-4 h-px bg-gradient-to-r from-blue-200 via-blue-100 to-transparent dark:from-blue-800/50 dark:via-blue-800/30 dark:to-transparent" />

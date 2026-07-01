@@ -1,7 +1,8 @@
 import { useMutation, useQuery } from "@tanstack/react-query"
-import apiClient from './axios'
+import { useHttpClient } from './axios'
 
 export const useFetchContentSection = (section: string) => {
+    const apiClient = useHttpClient()
     const query = useQuery({
         queryKey: [`section-content-${section}`],
         queryFn: async () => {
@@ -13,6 +14,7 @@ export const useFetchContentSection = (section: string) => {
 }
 
 export const useUpdateContentSection = () => {
+    const apiClient = useHttpClient()
     const mutation = useMutation({
         mutationFn: async ({content, section}: {content: any, section: string}) => {
             const { data } = await apiClient.put(`sections/${section}`, content)
