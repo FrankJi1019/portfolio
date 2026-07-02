@@ -13,7 +13,7 @@ export type UserRole = typeof AUTHENTICATED | typeof GUEST | typeof UNRESOLVED
 interface AuthContextValue {
   userRole: UserRole,
   login: (crendential: LoginCredentials) => Promise<void>,
-  logout: () => void,
+  logout: () => Promise<void>,
   continueAsGuest: () => void,
   getAccessToken: () => Promise<string | undefined>
 }
@@ -21,9 +21,9 @@ interface AuthContextValue {
 const AuthContext = createContext<AuthContextValue>({
   userRole: UNRESOLVED,
   login: async () => { },
-  logout: () => { },
+  logout: async () => { },
   continueAsGuest: () => { },
-  getAccessToken: () => undefined
+  getAccessToken: async () => undefined
 })
 
 export const useAuth = () => useContext(AuthContext)
@@ -47,7 +47,7 @@ export const AuthProvider = ({ children }: {
     setUserRole(UNRESOLVED)
   }, [setUserRole, signOut])
 
-  const continueAsGuest = useCallback(async () => {
+  const continueAsGuest = useCallback(() => {
     setUserRole(GUEST)
   }, [setUserRole])
 
