@@ -1,7 +1,7 @@
 import type { FC } from "react"
 import { useForm, useFieldArray, Controller } from "react-hook-form"
 import type { SkillsResponse, SkillCategory } from "../../types/portfolio"
-import { PageHeader, EntryCard, Field, TagList, SaveNotification } from "../../components/FormControls"
+import { PageHeader, EntryCard, Field, TagList } from "../../components/FormControls"
 import { SortableList, SortableItem } from "../../components/SortableList"
 import { useSaveHandler } from "../../hooks/useSaveHandler"
 import type { UserRole } from "../../providers/AuthProvider"
@@ -23,19 +23,19 @@ const SkillsPage: FC<SkillsPageProps> = ({ content, onSave, userRole }) => {
   })
 
   const { fields, prepend, remove, move } = useFieldArray({ control, name: "skills" })
-  const { handleSave, showNotification, dismissNotification } = useSaveHandler(onSave, reset)
+  const { handleSave, isSaving } = useSaveHandler(onSave, reset)
 
   const isReadOnly = userRole !== 'AUTHENTICATED'
 
   return (
     <div className="max-w-3xl">
-      <SaveNotification isVisible={showNotification} onDismiss={dismissNotification} />
       <PageHeader
         title="Skills"
         onRevert={() => reset(content)}
         onAdd={() => prepend(emptyCategory)}
         onSave={handleSubmit(handleSave)}
         isSaveDisabled={!isDirty}
+        isSaving={isSaving}
         userRole={userRole}
       />
       <SortableList items={fields} onReorder={move} disabled={isReadOnly}>

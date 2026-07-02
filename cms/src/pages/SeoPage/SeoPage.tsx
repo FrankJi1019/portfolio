@@ -1,7 +1,7 @@
 import type { FC } from "react"
 import { useForm, Controller } from "react-hook-form"
 import type { MetaData } from "../../types/portfolio"
-import { PageHeader, SeoHint, Field, TagList, SaveNotification } from "../../components/FormControls"
+import { PageHeader, SeoHint, Field, TagList } from "../../components/FormControls"
 import { useSaveHandler } from "../../hooks/useSaveHandler"
 import type { UserRole } from "../../providers/AuthProvider"
 
@@ -16,18 +16,18 @@ const SeoPage: FC<SeoPageProps> = ({ content, onSave, userRole }) => {
     defaultValues: content,
   })
 
-  const { handleSave, showNotification, dismissNotification } = useSaveHandler(onSave, reset)
+  const { handleSave, isSaving } = useSaveHandler(onSave, reset)
 
   const isReadOnly = userRole !== 'AUTHENTICATED'
 
   return (
     <div className="max-w-2xl">
-      <SaveNotification isVisible={showNotification} onDismiss={dismissNotification} />
       <PageHeader
         title="SEO & Meta"
         onRevert={() => reset(content)}
         onSave={handleSubmit(handleSave)}
         isSaveDisabled={!isDirty}
+        isSaving={isSaving}
         userRole={userRole}
       />
       <SeoHint />

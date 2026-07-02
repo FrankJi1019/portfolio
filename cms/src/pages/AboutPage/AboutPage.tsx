@@ -1,7 +1,7 @@
 import type { FC } from "react"
 import { useForm } from "react-hook-form"
 import type { AboutResponse } from "../../types/portfolio"
-import { PageHeader, SaveNotification } from "../../components/FormControls"
+import { PageHeader } from "../../components/FormControls"
 import { useSaveHandler } from "../../hooks/useSaveHandler"
 import { type UserRole } from "../../providers/AuthProvider"
 
@@ -16,19 +16,19 @@ const AboutPage: FC<AboutPageProps> = ({ content, userRole, onSave }) => {
     defaultValues: content,
   })
 
-  const { handleSave, showNotification, dismissNotification } = useSaveHandler(onSave, reset)
+  const { handleSave, isSaving } = useSaveHandler(onSave, reset)
 
   const isReadOnly = userRole !== 'AUTHENTICATED'
 
   return (
     <div className="max-w-2xl h-full flex flex-col">
-      <SaveNotification isVisible={showNotification} onDismiss={dismissNotification} />
       <PageHeader
         title="About"
         description="Your bio displayed in the About section."
         onRevert={() => reset(content)}
         onSave={handleSubmit(handleSave)}
         isSaveDisabled={!isDirty}
+        isSaving={isSaving}
         userRole={userRole}
       />
       <label className="flex flex-col flex-1 min-h-0">

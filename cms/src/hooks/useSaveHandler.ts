@@ -1,21 +1,24 @@
 import { useCallback, useState } from "react"
 import type { UseFormReset } from "react-hook-form"
+import { useNotification } from "../providers/NotificationProvider"
 
 export function useSaveHandler<T extends Record<string, any>>(
   onSave: (data: T) => Promise<void> | void,
   reset: UseFormReset<T>,
 ) {
-  const [showNotification, setShowNotification] = useState(false)
+  const [isSaving, setIsSaving] = useState(false)
+  const { showNotification } = useNotification()
 
   const handleSave = useCallback(async (data: T) => {
-    await onSave(data)
-    reset(data)
-    setShowNotification(true)
-  }, [onSave, reset])
+    setIsSaving(true)
+    try {
+      await onSave(data)
+      reset(data)
+      showNotification("Changes saved")
+    } finally {
+      setIsSaving(false)
+    }
+  }, [onSave, reset, showNotification])
 
-  const dismissNotification = useCallback(() => {
-    setShowNotification(false)
-  }, [])
-
-  return { handleSave, showNotification, dismissNotification }
+  return { handleSave, isSaving }
 }

@@ -1,7 +1,7 @@
 import type { FC } from "react"
 import { useForm, useFieldArray, Controller } from "react-hook-form"
 import type { EducationResponse, EducationEntry } from "../../types/portfolio"
-import { PageHeader, EntryCard, Field, DateField, SaveNotification } from "../../components/FormControls"
+import { PageHeader, EntryCard, Field, DateField } from "../../components/FormControls"
 import { SortableList, SortableItem } from "../../components/SortableList"
 import { useSaveHandler } from "../../hooks/useSaveHandler"
 import type { UserRole } from "../../providers/AuthProvider"
@@ -26,19 +26,19 @@ const EducationPage: FC<EducationPageProps> = ({ content, onSave, userRole }) =>
   })
 
   const { fields, prepend, remove, move } = useFieldArray({ control, name: "education" })
-  const { handleSave, showNotification, dismissNotification } = useSaveHandler(onSave, reset)
+  const { handleSave, isSaving } = useSaveHandler(onSave, reset)
 
   const isReadOnly = userRole !== 'AUTHENTICATED'
 
   return (
     <div className="max-w-3xl">
-      <SaveNotification isVisible={showNotification} onDismiss={dismissNotification} />
       <PageHeader
         title="Education"
         onRevert={() => reset(content)}
         onAdd={() => prepend(emptyEntry)}
         onSave={handleSubmit(handleSave)}
         isSaveDisabled={!isDirty}
+        isSaving={isSaving}
         userRole={userRole}
       />
       <SortableList items={fields} onReorder={move} disabled={isReadOnly}>

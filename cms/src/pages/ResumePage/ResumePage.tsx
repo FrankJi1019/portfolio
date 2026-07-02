@@ -1,10 +1,11 @@
 import { useState, type FC } from "react"
 import { useForm, Controller } from "react-hook-form"
 import type { ResumeData } from "../../types/portfolio"
-import { PageHeader, Tooltip, SaveNotification } from "../../components/FormControls"
+import { PageHeader, Tooltip } from "../../components/FormControls"
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome"
 import { faFileLines } from "@fortawesome/free-solid-svg-icons"
 import type { UserRole } from "../../providers/AuthProvider"
+import { useNotification } from "../../providers/NotificationProvider"
 
 interface ResumePageProps {
   content: ResumeData
@@ -18,7 +19,7 @@ const ResumePage: FC<ResumePageProps> = ({ content, onSync, userRole }) => {
   })
 
   const [isSyncing, setIsSyncing] = useState(false)
-  const [showNotification, setShowNotification] = useState(false)
+  const { showNotification } = useNotification()
 
   const selectedFileId = watch("selectedFileId")
   const isReadOnly = userRole !== 'AUTHENTICATED'
@@ -27,7 +28,7 @@ const ResumePage: FC<ResumePageProps> = ({ content, onSync, userRole }) => {
     setIsSyncing(true)
     try {
       await onSync(selectedFileId)
-      setShowNotification(true)
+      showNotification("Changes saved")
     } finally {
       setIsSyncing(false)
     }
@@ -35,7 +36,6 @@ const ResumePage: FC<ResumePageProps> = ({ content, onSync, userRole }) => {
 
   return (
     <div className="max-w-md">
-      <SaveNotification isVisible={showNotification} onDismiss={() => setShowNotification(false)} />
       <PageHeader title="Resume" userRole={userRole} />
 
       <div className="space-y-6">

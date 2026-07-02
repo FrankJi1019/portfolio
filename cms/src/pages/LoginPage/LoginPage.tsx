@@ -1,4 +1,4 @@
-import type { FC } from "react"
+import { useState, type FC } from "react"
 import { useForm, Controller } from "react-hook-form"
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome"
 import { faRightToBracket, faUser } from "@fortawesome/free-solid-svg-icons"
@@ -18,6 +18,16 @@ const LoginPage: FC<LoginPageProps> = ({ onLogin, onContinueAsGuest }) => {
   const { control, handleSubmit } = useForm<LoginCredentials>({
     defaultValues: { email: "", password: "" },
   })
+  const [isLoggingIn, setIsLoggingIn] = useState(false)
+
+  const handleLogin = async (credentials: LoginCredentials) => {
+    setIsLoggingIn(true)
+    try {
+      await onLogin(credentials)
+    } finally {
+      setIsLoggingIn(false)
+    }
+  }
 
   return (
     <div className="min-h-screen flex items-center justify-center bg-[#fafbfc] dark:bg-[#0f1117] px-4">
@@ -39,7 +49,7 @@ const LoginPage: FC<LoginPageProps> = ({ onLogin, onContinueAsGuest }) => {
 
         {/* Card */}
         <div className="rounded-2xl border border-gray-200/80 dark:border-gray-700/50 bg-white dark:bg-[#1a1d24] p-7 shadow-sm">
-          <form onSubmit={handleSubmit(onLogin)} className="space-y-5">
+          <form onSubmit={handleSubmit(handleLogin)} className="space-y-5">
             <Controller
               name="email"
               control={control}
@@ -67,10 +77,11 @@ const LoginPage: FC<LoginPageProps> = ({ onLogin, onContinueAsGuest }) => {
 
             <button
               type="submit"
-              className="w-full inline-flex items-center justify-center gap-2 text-xs font-semibold text-white bg-gradient-to-r from-blue-500 to-blue-600 hover:from-blue-600 hover:to-blue-700 px-4 py-3 rounded-full transition-all shadow-md shadow-blue-200/40 dark:shadow-blue-900/30 hover:scale-[1.02] active:scale-[0.98]"
+              disabled={isLoggingIn}
+              className="w-full inline-flex items-center justify-center gap-2 text-xs font-semibold text-white bg-gradient-to-r from-blue-500 to-blue-600 hover:from-blue-600 hover:to-blue-700 px-4 py-3 rounded-full transition-all shadow-md shadow-blue-200/40 dark:shadow-blue-900/30 hover:scale-[1.02] active:scale-[0.98] disabled:opacity-40 disabled:cursor-not-allowed disabled:hover:scale-100"
             >
               <FontAwesomeIcon icon={faRightToBracket} className="text-[11px]" />
-              Log in
+              {isLoggingIn ? "Logging in..." : "Log in"}
             </button>
           </form>
 

@@ -1,7 +1,7 @@
 import type { FC } from "react"
 import { useForm, useFieldArray, Controller } from "react-hook-form"
 import type { ContactResponse, ContactLink } from "../../types/portfolio"
-import { PageHeader, EntryCard, Field, SaveNotification } from "../../components/FormControls"
+import { PageHeader, EntryCard, Field } from "../../components/FormControls"
 import { useSaveHandler } from "../../hooks/useSaveHandler"
 import type { UserRole } from "../../providers/AuthProvider"
 
@@ -23,19 +23,19 @@ const ContactPage: FC<ContactPageProps> = ({ content, onSave, userRole }) => {
   })
 
   const { fields, prepend, remove } = useFieldArray({ control, name: "contact" })
-  const { handleSave, showNotification, dismissNotification } = useSaveHandler(onSave, reset)
+  const { handleSave, isSaving } = useSaveHandler(onSave, reset)
 
   const isReadOnly = userRole !== 'AUTHENTICATED'
 
   return (
     <div className="max-w-3xl">
-      <SaveNotification isVisible={showNotification} onDismiss={dismissNotification} />
       <PageHeader
         title="Contact"
         onRevert={() => reset(content)}
         onAdd={() => prepend(emptyLink)}
         onSave={handleSubmit(handleSave)}
         isSaveDisabled={!isDirty}
+        isSaving={isSaving}
         userRole={userRole}
       />
       <div className="space-y-4">

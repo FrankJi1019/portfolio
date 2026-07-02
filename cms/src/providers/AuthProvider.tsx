@@ -1,4 +1,4 @@
-import { createContext, useCallback, useContext, useState } from "react"
+import { createContext, useCallback, useContext, useEffect, useState } from "react"
 import { signIn, signOut, fetchAuthSession } from "aws-amplify/auth"
 import type { LoginCredentials } from "../pages/LoginPage/LoginPage"
 
@@ -12,7 +12,7 @@ export type UserRole = typeof AUTHENTICATED | typeof GUEST | typeof UNRESOLVED
 
 interface AuthContextValue {
   userRole: UserRole,
-  login: (crendential: LoginCredentials) => void,
+  login: (crendential: LoginCredentials) => Promise<void>,
   logout: () => void,
   continueAsGuest: () => void,
   getAccessToken: () => Promise<string | undefined>
@@ -20,7 +20,7 @@ interface AuthContextValue {
 
 const AuthContext = createContext<AuthContextValue>({
   userRole: UNRESOLVED,
-  login: () => { },
+  login: async () => { },
   logout: () => { },
   continueAsGuest: () => { },
   getAccessToken: () => undefined
@@ -55,6 +55,14 @@ export const AuthProvider = ({ children }: {
     const authSession = await fetchAuthSession()
     return authSession.tokens?.accessToken?.toString()
   }, [fetchAuthSession])
+
+  useEffect(() => {
+    (async () => {
+      if (!!await getAccessToken()) {
+        setUserRole(AUTHENTICATED)
+      }
+    })()
+  }, [getAccessToken, setUserRole])
 
   return (
     <AuthContext value={{

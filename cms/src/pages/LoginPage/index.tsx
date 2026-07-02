@@ -1,15 +1,20 @@
 import { useCallback, type FC } from "react"
 import LoginPage, { type LoginCredentials } from "./LoginPage"
 import { useAuth } from "../../providers/AuthProvider"
+import { useNotification } from "../../providers/NotificationProvider"
 
 const LoginPageBuilder: FC = () => {
 
-  const {login, continueAsGuest} = useAuth()
+  const { login, continueAsGuest } = useAuth()
+  const { showNotification } = useNotification()
 
   const handleLogin = useCallback(async (credentials: LoginCredentials) => {
-    await login(credentials)
-  }, [login])
-
+    try {
+      await login(credentials)
+    } catch {
+      showNotification("Invalid username or password", "error")
+    }
+  }, [login, showNotification])
 
   const handleContinueAsGuest = useCallback(() => {
     continueAsGuest()

@@ -6,6 +6,7 @@ import App from "./App"
 import "./index.css"
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query"
 import { AuthProvider } from "./providers/AuthProvider"
+import { NotificationProvider } from "./providers/NotificationProvider"
 import { Amplify } from 'aws-amplify';
 
 Amplify.configure({
@@ -24,7 +25,9 @@ createRoot(document.getElementById("root")!).render(
       <QueryClientProvider client={new QueryClient()}>
         <ThemeProvider>
           <AuthProvider>
-            <App />
+            <NotificationProvider>
+              <App />
+            </NotificationProvider>
           </AuthProvider>
         </ThemeProvider>
       </QueryClientProvider>

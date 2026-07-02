@@ -1,3 +1,4 @@
+import { useState } from "react"
 import { NavLink } from "react-router-dom"
 import { Routes } from "../routes/routes"
 import { useTheme } from "../providers/ThemeProvider"
@@ -25,6 +26,16 @@ const authenticatedNavItems: { path: string; label: string; icon: IconDefinition
 const Sidebar = () => {
   const { isDark, toggle } = useTheme()
   const { userRole, logout } = useAuth()
+  const [isLoggingOut, setIsLoggingOut] = useState(false)
+
+  const handleLogout = async () => {
+    setIsLoggingOut(true)
+    try {
+      await logout()
+    } finally {
+      setIsLoggingOut(false)
+    }
+  }
 
   return (
     <aside className="w-64 border-r border-gray-100 dark:border-gray-800 bg-white dark:bg-[#13151a] py-6 px-5 flex flex-col shrink-0">
@@ -88,11 +99,12 @@ const Sidebar = () => {
 
       {/* Logout */}
       <button
-        onClick={logout}
-        className="mt-1 mx-3 flex items-center gap-2.5 px-3 py-2.5 rounded-xl text-[13px] text-gray-500 dark:text-gray-400 hover:text-red-600 dark:hover:text-red-400 hover:bg-red-50 dark:hover:bg-red-950/30 transition-all"
+        onClick={handleLogout}
+        disabled={isLoggingOut}
+        className="mt-1 mx-3 flex items-center gap-2.5 px-3 py-2.5 rounded-xl text-[13px] text-gray-500 dark:text-gray-400 hover:text-red-600 dark:hover:text-red-400 hover:bg-red-50 dark:hover:bg-red-950/30 transition-all disabled:opacity-40 disabled:cursor-not-allowed"
       >
         <FontAwesomeIcon icon={faRightFromBracket} className="w-3.5 text-[11px] opacity-60" />
-        Log out
+        {isLoggingOut ? "Logging out..." : "Log out"}
       </button>
     </aside>
   )
