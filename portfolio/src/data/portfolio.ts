@@ -1,3 +1,5 @@
+import { cache } from "react";
+
 export interface Role {
   title: string;
   company: string;
@@ -104,8 +106,8 @@ function formatPeriod(startDate: string, endDate: string, isCurrentRole?: boolea
   return `${start} — ${end}`;
 }
 
-export async function fetchPortfolioData(): Promise<PortfolioData> {
-  const res = await fetch(API_URL, { cache: 'no-store' });
+export const fetchPortfolioData = cache(async (): Promise<PortfolioData> => {
+  const res = await fetch(API_URL, { next: { revalidate: 300 } });
 
   if (!res.ok) {
     throw new Error(`Failed to fetch portfolio data: ${res.status}`);
@@ -173,4 +175,4 @@ export async function fetchPortfolioData(): Promise<PortfolioData> {
     contact: json.contact.contact,
     navLinks: NAV_LINKS,
   };
-}
+});
