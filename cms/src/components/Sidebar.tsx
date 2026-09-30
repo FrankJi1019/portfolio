@@ -6,6 +6,7 @@ import { useAuth } from "../providers/AuthProvider"
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome"
 import { faStar, faBriefcase, faGraduationCap, faCode, faCubes, faCertificate, faAddressBook, faMagnifyingGlass, faFileArrowUp, faFeather, faCircleHalfStroke, faRightFromBracket } from "@fortawesome/free-solid-svg-icons"
 import type { IconDefinition } from "@fortawesome/fontawesome-svg-core"
+import PublishButton from "./PublishButton"
 
 const navItems: { path: string; label: string; icon: IconDefinition }[] = [
   { ...Routes.HERO, icon: faStar },
@@ -87,6 +88,8 @@ const Sidebar = () => {
           </NavLink>
         ))}
       </nav>
+
+      {userRole === 'AUTHENTICATED' && <PublishButton />}
 
       {/* Theme toggle */}
       <button

@@ -84,6 +84,9 @@ export interface PortfolioData {
 const API_URL =
   "https://qamcukdm60.execute-api.ap-southeast-2.amazonaws.com/portfolio/sections";
 
+// Invalidated on demand by /api/revalidate when content is published from the CMS.
+export const PORTFOLIO_CACHE_TAG = "portfolio-content";
+
 const NAV_LINKS: NavLink[] = [
   { href: "#about", label: "About" },
   { href: "#experience", label: "Experience" },
@@ -107,7 +110,9 @@ function formatPeriod(startDate: string, endDate: string, isCurrentRole?: boolea
 }
 
 export const fetchPortfolioData = cache(async (): Promise<PortfolioData> => {
-  const res = await fetch(API_URL, { next: { revalidate: 300 } });
+  const res = await fetch(API_URL, {
+    next: { revalidate: 300, tags: [PORTFOLIO_CACHE_TAG] },
+  });
 
   if (!res.ok) {
     throw new Error(`Failed to fetch portfolio data: ${res.status}`);

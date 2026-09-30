@@ -23,7 +23,8 @@ export const useHttpClient = () => {
   apiClient.interceptors.response.use(
     (response) => response,
     (error) => {
-      if (error.response.status === 401) {
+      // No response on network/CORS failures, so status must be read optionally.
+      if (error.response?.status === 401) {
         navigate(Routes.LOGIN.path)
       }
       return Promise.reject(error)
