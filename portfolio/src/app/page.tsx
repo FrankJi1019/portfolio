@@ -11,17 +11,18 @@ import { fetchPortfolioData } from "@/data/portfolio";
 
 export default async function Home() {
   const portfolio = await fetchPortfolioData();
+  const { visibility } = portfolio;
 
   return (
     <div className="mx-auto max-w-5xl px-6">
-      <Hero hero={portfolio.hero} resumeUrl={portfolio.meta.resumeUrl} />
-      <Reveal><About about={portfolio.about} /></Reveal>
-      <Reveal><Experience experience={portfolio.experience} /></Reveal>
-      <Reveal><Education education={portfolio.education} /></Reveal>
-      <Reveal><Certifications certifications={portfolio.certifications} /></Reveal>
-      <Reveal><Projects projects={portfolio.projects} /></Reveal>
-      <Reveal><Skills skills={portfolio.skills} /></Reveal>
-      <Reveal><Contact contact={portfolio.contact} /></Reveal>
+      <Hero hero={portfolio.hero} resumeUrl={portfolio.meta.resumeUrl} isContactVisible={visibility.contact} />
+      {visibility.about && <Reveal><About about={portfolio.about} /></Reveal>}
+      {visibility.experience && <Reveal><Experience experience={portfolio.experience} /></Reveal>}
+      {visibility.education && <Reveal><Education education={portfolio.education} /></Reveal>}
+      {visibility.certifications && <Reveal><Certifications certifications={portfolio.certifications} /></Reveal>}
+      {visibility.projects && <Reveal><Projects projects={portfolio.projects} /></Reveal>}
+      {visibility.skills && <Reveal><Skills skills={portfolio.skills} /></Reveal>}
+      {visibility.contact && <Reveal><Contact contact={portfolio.contact} /></Reveal>}
     </div>
   );
 }

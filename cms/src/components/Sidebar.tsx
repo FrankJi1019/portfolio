@@ -7,27 +7,57 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome"
 import { faStar, faBriefcase, faGraduationCap, faCode, faCubes, faCertificate, faAddressBook, faMagnifyingGlass, faFileArrowUp, faFeather, faCircleHalfStroke, faRightFromBracket } from "@fortawesome/free-solid-svg-icons"
 import type { IconDefinition } from "@fortawesome/fontawesome-svg-core"
 import PublishButton from "./PublishButton"
+import SectionVisibilityToggle from "./SectionVisibilityToggle"
+import { useSectionVisibility } from "../hooks/useSectionVisibility"
+import { useNotification } from "../providers/NotificationProvider"
+import type { SectionId } from "../types/portfolio"
 
-const navItems: { path: string; label: string; icon: IconDefinition }[] = [
+interface NavItem {
+  path: string
+  label: string
+  icon: IconDefinition
+  // Present when the section can be shown/hidden on the portfolio.
+  sectionId?: SectionId
+}
+
+const navItems: NavItem[] = [
   { ...Routes.HERO, icon: faStar },
-  { ...Routes.ABOUT, icon: faFeather },
-  { ...Routes.EXPERIENCE, icon: faBriefcase },
-  { ...Routes.EDUCATION, icon: faGraduationCap },
-  { ...Routes.PROJECTS, icon: faCode },
-  { ...Routes.SKILLS, icon: faCubes },
-  { ...Routes.CERTIFICATIONS, icon: faCertificate },
-  { ...Routes.CONTACT, icon: faAddressBook },
+  { ...Routes.ABOUT, icon: faFeather, sectionId: "about" },
+  { ...Routes.EXPERIENCE, icon: faBriefcase, sectionId: "experience" },
+  { ...Routes.EDUCATION, icon: faGraduationCap, sectionId: "education" },
+  { ...Routes.PROJECTS, icon: faCode, sectionId: "projects" },
+  { ...Routes.SKILLS, icon: faCubes, sectionId: "skills" },
+  { ...Routes.CERTIFICATIONS, icon: faCertificate, sectionId: "certifications" },
+  { ...Routes.CONTACT, icon: faAddressBook, sectionId: "contact" },
   { ...Routes.SEO, icon: faMagnifyingGlass },
 ]
 
-const authenticatedNavItems: { path: string; label: string; icon: IconDefinition }[] = [
+const authenticatedNavItems: NavItem[] = [
   { ...Routes.RESUME, icon: faFileArrowUp },
 ]
+
+const navLinkClassName = ({ isActive }: { isActive: boolean }) =>
+  `group flex flex-1 min-w-0 items-center gap-3 px-3 py-2.5 rounded-xl text-[13px] font-medium transition-all duration-150 ${isActive ? "bg-blue-50 dark:bg-blue-950/40 text-blue-700 dark:text-blue-300 shadow-sm shadow-blue-100/50 dark:shadow-none" : "text-gray-500 dark:text-gray-400 hover:text-gray-800 dark:hover:text-gray-200 hover:bg-gray-50 dark:hover:bg-white/5"}`
 
 const Sidebar = () => {
   const { isDark, toggle } = useTheme()
   const { userRole, logout } = useAuth()
+  const { showNotification } = useNotification()
+  const { visibility, isReady, isSaving, setVisibility } = useSectionVisibility()
   const [isLoggingOut, setIsLoggingOut] = useState(false)
+
+  const isAuthenticated = userRole === 'AUTHENTICATED'
+
+  const handleToggleSection = async (item: NavItem & { sectionId: SectionId }) => {
+    const isVisible = !visibility[item.sectionId]
+    try {
+      await setVisibility(item.sectionId, isVisible)
+      showNotification(`${item.label} ${isVisible ? "shown" : "hidden"} — publish to update the live site`)
+    } catch (error) {
+      console.error("Failed to update section visibility", error)
+      showNotification(`Couldn't update ${item.label} visibility`, "error")
+    }
+  }
 
   const handleLogout = async () => {
     setIsLoggingOut(true)
@@ -61,35 +91,35 @@ const Sidebar = () => {
 
       {/* Nav */}
       <nav className="flex-1 flex flex-col gap-0.5">
-        {navItems.map((item) => (
-          <NavLink
-            key={item.path}
-            to={item.path}
-            end
-            className={({ isActive }) =>
-              `group flex items-center gap-3 px-3 py-2.5 rounded-xl text-[13px] font-medium transition-all duration-150 ${isActive ? "bg-blue-50 dark:bg-blue-950/40 text-blue-700 dark:text-blue-300 shadow-sm shadow-blue-100/50 dark:shadow-none" : "text-gray-500 dark:text-gray-400 hover:text-gray-800 dark:hover:text-gray-200 hover:bg-gray-50 dark:hover:bg-white/5"}`
-            }
-          >
-            <FontAwesomeIcon icon={item.icon} className="w-3.5 text-[11px] opacity-60 group-hover:opacity-100 transition-opacity" />
-            {item.label}
-          </NavLink>
-        ))}
-        {userRole === 'AUTHENTICATED' && authenticatedNavItems.map((item) => (
-          <NavLink
-            key={item.path}
-            to={item.path}
-            end
-            className={({ isActive }) =>
-              `group flex items-center gap-3 px-3 py-2.5 rounded-xl text-[13px] font-medium transition-all duration-150 ${isActive ? "bg-blue-50 dark:bg-blue-950/40 text-blue-700 dark:text-blue-300 shadow-sm shadow-blue-100/50 dark:shadow-none" : "text-gray-500 dark:text-gray-400 hover:text-gray-800 dark:hover:text-gray-200 hover:bg-gray-50 dark:hover:bg-white/5"}`
-            }
-          >
+        {navItems.map((item) => {
+          const { sectionId } = item
+          const isHidden = !!sectionId && !visibility[sectionId]
+          return (
+            <div key={item.path} className="flex items-center gap-2">
+              <NavLink to={item.path} end className={navLinkClassName}>
+                <FontAwesomeIcon icon={item.icon} className="w-3.5 text-[11px] opacity-60 group-hover:opacity-100 transition-opacity" />
+                <span className={`truncate ${isHidden ? "opacity-50 line-through decoration-gray-300 dark:decoration-gray-600" : ""}`}>{item.label}</span>
+              </NavLink>
+              {sectionId && (
+                <SectionVisibilityToggle
+                  label={item.label}
+                  isVisible={visibility[sectionId]}
+                  onToggle={() => handleToggleSection({ ...item, sectionId })}
+                  disabled={!isAuthenticated || !isReady || isSaving}
+                />
+              )}
+            </div>
+          )
+        })}
+        {isAuthenticated && authenticatedNavItems.map((item) => (
+          <NavLink key={item.path} to={item.path} end className={navLinkClassName}>
             <FontAwesomeIcon icon={item.icon} className="w-3.5 text-[11px] opacity-60 group-hover:opacity-100 transition-opacity" />
             {item.label}
           </NavLink>
         ))}
       </nav>
 
-      {userRole === 'AUTHENTICATED' && <PublishButton />}
+      {isAuthenticated && <PublishButton />}
 
       {/* Theme toggle */}
       <button

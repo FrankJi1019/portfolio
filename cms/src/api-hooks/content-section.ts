@@ -1,14 +1,15 @@
 import { useMutation, useQuery } from "@tanstack/react-query"
 import { useHttpClient } from './axios'
 
-export const useFetchContentSection = (section: string) => {
+export const useFetchContentSection = (section: string, options?: { retry?: boolean }) => {
     const apiClient = useHttpClient()
     const query = useQuery({
         queryKey: [`section-content-${section}`],
         queryFn: async () => {
             const { data } = await apiClient.get(`sections/${section}`)
             return data
-        }
+        },
+        retry: options?.retry,
     })
     return query
 }

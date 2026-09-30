@@ -68,6 +68,17 @@ export interface MetaData {
   resumeUrl: string;
 }
 
+export type SectionId =
+  | "about"
+  | "experience"
+  | "education"
+  | "certifications"
+  | "projects"
+  | "skills"
+  | "contact";
+
+export type SectionVisibility = Record<SectionId, boolean>;
+
 export interface PortfolioData {
   meta: MetaData;
   hero: HeroData;
@@ -78,6 +89,7 @@ export interface PortfolioData {
   skills: SkillCategory[];
   certifications: Certification[];
   contact: ContactLink[];
+  visibility: SectionVisibility;
   navLinks: NavLink[];
 }
 
@@ -87,15 +99,30 @@ const API_URL =
 // Invalidated on demand by /api/revalidate when content is published from the CMS.
 export const PORTFOLIO_CACHE_TAG = "portfolio-content";
 
-const NAV_LINKS: NavLink[] = [
-  { href: "#about", label: "About" },
-  { href: "#experience", label: "Experience" },
-  { href: "#education", label: "Education" },
-  { href: "#certifications", label: "Certifications" },
-  { href: "#projects", label: "Projects" },
-  { href: "#skills", label: "Skills" },
-  { href: "#contact", label: "Contact" },
+// Page order; also drives the header nav, command palette and terminal commands.
+const SECTIONS: { id: SectionId; label: string }[] = [
+  { id: "about", label: "About" },
+  { id: "experience", label: "Experience" },
+  { id: "education", label: "Education" },
+  { id: "certifications", label: "Certifications" },
+  { id: "projects", label: "Projects" },
+  { id: "skills", label: "Skills" },
+  { id: "contact", label: "Contact" },
 ];
+
+// Sections default to visible, so a missing visibility file or a newly added section never hides content.
+function toVisibility(stored: Partial<Record<string, boolean>> | undefined): SectionVisibility {
+  return Object.fromEntries(
+    SECTIONS.map(({ id }) => [id, stored?.[id] !== false])
+  ) as SectionVisibility;
+}
+
+function toNavLinks(visibility: SectionVisibility): NavLink[] {
+  return SECTIONS.filter(({ id }) => visibility[id]).map(({ id, label }) => ({
+    href: `#${id}`,
+    label,
+  }));
+}
 
 function formatPeriod(startDate: string, endDate: string, isCurrentRole?: boolean): string {
   const format = (d: string) => {
@@ -119,6 +146,7 @@ export const fetchPortfolioData = cache(async (): Promise<PortfolioData> => {
   }
 
   const json = await res.json();
+  const visibility = toVisibility(json.visibility?.sections);
 
   return {
     meta: {
@@ -178,6 +206,7 @@ export const fetchPortfolioData = cache(async (): Promise<PortfolioData> => {
       })
     ),
     contact: json.contact.contact,
-    navLinks: NAV_LINKS,
+    visibility,
+    navLinks: toNavLinks(visibility),
   };
 });

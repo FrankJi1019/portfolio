@@ -2,7 +2,7 @@
 
 import { useState, useRef, useEffect, useCallback } from "react";
 import { usePortfolioData } from "./portfolio-data-provider";
-import type { PortfolioData } from "@/data/portfolio";
+import type { PortfolioData, SectionId } from "@/data/portfolio";
 
 interface OutputLine {
   id: number;
@@ -15,18 +15,6 @@ const ASCII_BANNER = `  _____ ____    _    _   _ _  __    _ ___
  | |_  | |_) |/ _ \\ |  \\| | ' / _  | || |
  |  _| |  _ </ ___ \\| |\\  | . \\| |_| || |
  |_|   |_| \\_\\_/  \\_\\_| \\_|_|\\_\\\\___/|___|`;
-
-const HELP_TEXT = `Available commands:
-  about          — Who I am
-  experience     — Work history
-  education      — Academic background
-  certifications — Credentials
-  projects       — Things I've built
-  skills         — Tech stack
-  contact        — Get in touch
-  clear          — Clear the terminal
-  exit           — Return to normal view
-  help           — Show this message`;
 
 function formatAbout(data: PortfolioData): string {
   return `━━━ ABOUT ME ━━━\n\n${data.about.replace(/\n\n/g, " ")}`;
@@ -72,30 +60,46 @@ function formatContact(data: PortfolioData): string {
   return `━━━ CONTACT ━━━\n\n${entries}`;
 }
 
+const SECTION_COMMANDS: Record<SectionId, { description: string; format: (data: PortfolioData) => string }> = {
+  about: { description: "Who I am", format: formatAbout },
+  experience: { description: "Work history", format: formatExperience },
+  education: { description: "Academic background", format: formatEducation },
+  certifications: { description: "Credentials", format: formatCertifications },
+  projects: { description: "Things I've built", format: formatProjects },
+  skills: { description: "Tech stack", format: formatSkills },
+  contact: { description: "Get in touch", format: formatContact },
+};
+
+const UTILITY_COMMANDS: [string, string][] = [
+  ["clear", "Clear the terminal"],
+  ["exit", "Return to normal view"],
+  ["help", "Show this message"],
+];
+
+function isSectionId(cmd: string): cmd is SectionId {
+  return cmd in SECTION_COMMANDS;
+}
+
+function formatHelp(data: PortfolioData): string {
+  const sectionEntries = Object.entries(SECTION_COMMANDS)
+    .filter(([id]) => data.visibility[id as SectionId])
+    .map(([id, { description }]) => [id, description]);
+  const lines = [...sectionEntries, ...UTILITY_COMMANDS].map(
+    ([name, description]) => `  ${name.padEnd(15)}— ${description}`
+  );
+  return `Available commands:\n${lines.join("\n")}`;
+}
+
 function processCommand(input: string, data: PortfolioData): { text: string; type: "response" | "error" | "ascii" } {
   const cmd = input.trim().toLowerCase();
-  switch (cmd) {
-    case "help":
-      return { text: HELP_TEXT, type: "response" };
-    case "about":
-      return { text: formatAbout(data), type: "response" };
-    case "experience":
-      return { text: formatExperience(data), type: "response" };
-    case "education":
-      return { text: formatEducation(data), type: "response" };
-    case "certifications":
-      return { text: formatCertifications(data), type: "response" };
-    case "projects":
-      return { text: formatProjects(data), type: "response" };
-    case "skills":
-      return { text: formatSkills(data), type: "response" };
-    case "contact":
-      return { text: formatContact(data), type: "response" };
-    case "":
-      return { text: "", type: "response" };
-    default:
-      return { text: `command not found: ${cmd}. Type "help" for available commands.`, type: "error" };
+
+  if (cmd === "") return { text: "", type: "response" };
+  if (cmd === "help") return { text: formatHelp(data), type: "response" };
+  if (isSectionId(cmd) && data.visibility[cmd]) {
+    return { text: SECTION_COMMANDS[cmd].format(data), type: "response" };
   }
+
+  return { text: `command not found: ${cmd}. Type "help" for available commands.`, type: "error" };
 }
 
 export function Terminal({ onExit }: { onExit: () => void }) {

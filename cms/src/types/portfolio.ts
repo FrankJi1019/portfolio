@@ -138,3 +138,20 @@ export const STATUS_OPTIONS = [
   { value: "freelancing", label: "Freelancing" },
   { value: "not_looking", label: "Not Looking" },
 ] as const
+
+// Must match the section ids the portfolio site renders (portfolio/src/data/portfolio.ts).
+export const TOGGLEABLE_SECTIONS = [
+  { id: "about", label: "About" },
+  { id: "experience", label: "Experience" },
+  { id: "education", label: "Education" },
+  { id: "certifications", label: "Certifications" },
+  { id: "projects", label: "Projects" },
+  { id: "skills", label: "Skills" },
+  { id: "contact", label: "Contact" },
+] as const
+
+export type SectionId = (typeof TOGGLEABLE_SECTIONS)[number]["id"]
+
+export interface VisibilityResponse {
+  sections: Record<SectionId, boolean>
+}

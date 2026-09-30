@@ -5,9 +5,10 @@ import type { HeroData } from "@/data/portfolio";
 interface HeroProps {
   hero: HeroData;
   resumeUrl: string;
+  isContactVisible: boolean;
 }
 
-export function Hero({ hero, resumeUrl }: HeroProps) {
+export function Hero({ hero, resumeUrl, isContactVisible }: HeroProps) {
   return (
     <section aria-label="Introduction" className="relative flex min-h-[60vh] flex-col justify-center py-16 sm:min-h-[calc(100vh-73px)] sm:py-20">
       <div className="mb-8 flex items-center gap-2 rounded-full border border-[var(--border)] px-3 py-1.5 w-fit font-mono">
@@ -40,12 +41,14 @@ export function Hero({ hero, resumeUrl }: HeroProps) {
         >
           View Resume
         </a>
-        <a
-          href="#contact"
-          className="rounded-md border border-accent/50 px-5 py-2.5 text-sm font-medium text-accent transition-all hover:border-accent hover:bg-accent/10 hover:scale-105"
-        >
-          Get in Touch
-        </a>
+        {isContactVisible && (
+          <a
+            href="#contact"
+            className="rounded-md border border-accent/50 px-5 py-2.5 text-sm font-medium text-accent transition-all hover:border-accent hover:bg-accent/10 hover:scale-105"
+          >
+            Get in Touch
+          </a>
+        )}
       </div>
       <p className="mt-6 hidden items-center gap-1.5 font-mono text-xs text-[var(--muted)] md:flex">
         Press{" "}
