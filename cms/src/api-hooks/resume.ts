@@ -1,12 +1,13 @@
 import { useMutation, useQuery } from "@tanstack/react-query"
 import { useHttpClient } from './axios'
+import type { DriveFile } from "../types/portfolio"
 
 export const useFetchResumes = () => {
     const apiClient = useHttpClient()
     const query = useQuery({
         queryKey: ["section-content-resume"],
         queryFn: async () => {
-            const { data } = await apiClient.get("resume/list")
+            const { data } = await apiClient.get<DriveFile[]>("resume/list")
             return data
         }
     })
