@@ -1,7 +1,9 @@
 import type { FC } from "react"
 import { useForm, useFieldArray, Controller } from "react-hook-form"
 import type { ExperienceResponse, Role } from "../../types/portfolio"
-import { PageHeader, EntryCard, Field, DateField } from "../../components/FormControls"
+import { PageHeader, Field, DateField } from "../../components/FormControls"
+import CollapsibleEntryCard from "../../components/CollapsibleEntryCard"
+import { formatDateRange, joinSubheading } from "../../utils/subheading"
 import { SortableList, SortableItem } from "../../components/SortableList"
 import { useSaveHandler } from "../../hooks/useSaveHandler"
 import type { UserRole } from "../../providers/AuthProvider"
@@ -45,10 +47,22 @@ const ExperiencePage: FC<ExperiencePageProps> = ({ content, onSave, userRole }) 
       <SortableList items={fields} onReorder={move} disabled={isReadOnly}>
         <div className="space-y-4 pl-8">
           {fields.map((field, i) => {
-            const isCurrentRole = watch(`experience.${i}.isCurrentRole`)
+            const [title, company, startDate, endDate, isCurrentRole] = watch([
+              `experience.${i}.title`,
+              `experience.${i}.company`,
+              `experience.${i}.startDate`,
+              `experience.${i}.endDate`,
+              `experience.${i}.isCurrentRole`,
+            ])
             return (
               <SortableItem key={field.id} id={field.id} disabled={isReadOnly}>
-                <EntryCard onRemove={() => remove(i)} disabled={isReadOnly}>
+                <CollapsibleEntryCard
+                  heading={title}
+                  subheading={joinSubheading(company, formatDateRange(startDate, endDate, isCurrentRole))}
+                  placeholderHeading="New role"
+                  onRemove={() => remove(i)}
+                  disabled={isReadOnly}
+                >
                   <div className="grid grid-cols-2 gap-4">
                     <Controller
                       name={`experience.${i}.title`}
@@ -108,7 +122,7 @@ const ExperiencePage: FC<ExperiencePageProps> = ({ content, onSave, userRole }) 
                       <Field label="Description" value={field.value} onChange={field.onChange} multiline tall className="mt-4" disabled={isReadOnly} />
                     )}
                   />
-                </EntryCard>
+                </CollapsibleEntryCard>
               </SortableItem>
             )
           })}

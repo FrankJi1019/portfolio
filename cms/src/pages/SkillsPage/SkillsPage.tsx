@@ -54,7 +54,7 @@ const SkillsPage: FC<SkillsPageProps> = ({ content, onSave, userRole }) => {
                   name={`skills.${i}.items`}
                   control={control}
                   render={({ field }) => (
-                    <TagList label="Skills" items={field.value} onChange={field.onChange} className="mt-4" disabled={isReadOnly} />
+                    <TagList label="Skills" items={field.value} onChange={field.onChange} className="mt-4" disabled={isReadOnly} isSortable />
                   )}
                 />
               </EntryCard>

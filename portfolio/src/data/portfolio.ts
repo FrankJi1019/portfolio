@@ -187,8 +187,10 @@ export const fetchPortfolioData = cache(async (): Promise<PortfolioData> => {
         achievements: edu.description.split("\n"),
       })
     ),
-    projects: json.projects.projects.map(
-      (proj: { title: string; description: string; tech: string[]; link?: string }) => ({
+    projects: json.projects.projects
+      // Filtered here so the page, terminal and metadata all skip hidden projects.
+      .filter((proj: { isHidden?: boolean }) => !proj.isHidden)
+      .map((proj: { title: string; description: string; tech: string[]; link?: string }) => ({
         title: proj.title,
         description: proj.description,
         tech: proj.tech,

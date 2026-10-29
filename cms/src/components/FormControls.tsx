@@ -2,6 +2,7 @@ import { useState } from "react"
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome"
 import { faXmark, faPlus, faCircleQuestion, faFloppyDisk, faRotateLeft } from "@fortawesome/free-solid-svg-icons"
 import type { UserRole } from "../providers/AuthProvider";
+import { TagChips } from "./TagChips"
 
 export const PageHeader = ({ title, description, onAdd, onRevert, onSave, isSaveDisabled, isSaving, userRole }: { title: string; description?: string; onAdd?: () => void; onRevert?: () => void; onSave?: () => void; isSaveDisabled?: boolean; isSaving?: boolean; userRole: UserRole }) => (
   <div className="mb-10">
@@ -152,7 +153,7 @@ export const DateField = ({ label, value, onChange, className = "", disabled }: 
   )
 }
 
-export const TagList = ({ label, items, onChange, className = "", disabled }: { label: string; items: string[]; onChange: (items: string[]) => void; className?: string; disabled?: boolean }) => {
+export const TagList = ({ label, items, onChange, className = "", disabled, isSortable }: { label: string; items: string[]; onChange: (items: string[]) => void; className?: string; disabled?: boolean; isSortable?: boolean }) => {
   const [input, setInput] = useState("")
 
   const handleAdd = () => {
@@ -191,18 +192,7 @@ export const TagList = ({ label, items, onChange, className = "", disabled }: { 
         </div>
       )}
       {items.length > 0 && (
-        <div className="flex flex-wrap gap-2">
-          {items.map((item, i) => (
-            <span key={i} className="inline-flex items-center gap-1.5 bg-white dark:bg-gray-800 text-blue-700 dark:text-blue-300 text-xs font-medium pl-3 pr-2 py-1.5 rounded-full border border-blue-200/80 dark:border-blue-700/50 shadow-sm hover:shadow-md hover:scale-[1.03] transition-all duration-150 cursor-default">
-              {item}
-              {!disabled && (
-                <button onClick={() => onChange(items.filter((_, j) => j !== i))} className="w-4 h-4 flex items-center justify-center rounded-full hover:bg-red-500 hover:text-white text-blue-300 dark:text-blue-600 transition-all">
-                  <FontAwesomeIcon icon={faXmark} className="text-[8px]" />
-                </button>
-              )}
-            </span>
-          ))}
-        </div>
+        <TagChips items={items} onChange={onChange} disabled={disabled} isSortable={isSortable} />
       )}
     </div>
   )

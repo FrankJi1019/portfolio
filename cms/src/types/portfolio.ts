@@ -43,6 +43,8 @@ export interface Project {
   description: string
   tech: string[]
   link?: string
+  // Optional so projects saved before this flag existed stay visible.
+  isHidden?: boolean
 }
 
 export interface SkillCategory {
